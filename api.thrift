@@ -211,6 +211,6 @@ service API
     NodesInfoGetResult NodesInfoGet()
 
     SmartContractGetResult SmartContractGet(1:Address address)
-    SmartContractsListGetResult SmartContractsListGet(1:Address address)
-    SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address address)
+    SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
+    SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
 }
