@@ -16,12 +16,12 @@ typedef map<Currency, Amount> Balance
 struct SmartContract
 {
   1: required string address;
-  2: string sourceCode;
-  3: binary byteCode;
-  4: binary contractState;
-  5: string hashState;
-  6: string method;
-  7: list<string> params;
+  2: optional string sourceCode;
+  3: optional binary byteCode;
+  4: optional binary contractState;
+  5: optional string hashState;
+  6: optional string method;
+  7: optional list<string> params;
 }
 
 //
