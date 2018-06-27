@@ -1,3 +1,5 @@
+namespace csharp NodeApi
+namespace netcore NodeApi
 namespace java com.credits.leveldb.client.thrift
 namespace cpp api
 
@@ -11,7 +13,15 @@ struct Amount
   2: required i64 fraction = 0;
 }
 
-typedef map<Currency, Amount> Balance
+struct CumulativeAmount
+{
+  1: required i64 integral = 0;
+  2: required i64 fraction = 0;
+}
+
+typedef map<Currency, Amount> Balance;
+
+typedef map<Currency, CumulativeAmount> Total;
 
 struct SmartContract
 {
@@ -77,7 +87,7 @@ struct PeriodStats
     1: Time periodDuration
     2: Count poolsCount
     3: Count transactionsCount
-    4: Balance balancePerCurrency
+    4: Total balancePerCurrency
 }
 
 typedef list<PeriodStats> StatsPerPeriod
