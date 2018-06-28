@@ -88,6 +88,7 @@ struct PeriodStats
     2: Count poolsCount
     3: Count transactionsCount
     4: Total balancePerCurrency
+    5: Count smartContractsCount
 }
 
 typedef list<PeriodStats> StatsPerPeriod
