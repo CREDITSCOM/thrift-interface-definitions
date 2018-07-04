@@ -1,3 +1,4 @@
+include "variant.thrift"
 namespace java com.credits.thrift
 namespace cpp executor
 
@@ -6,6 +7,7 @@ struct APIResponse
     1: i8 code
     2: string message
 	3: binary contractState
+	4: variant.variant ret_val
 }
 
 service ContractExecutor

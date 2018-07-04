@@ -1,3 +1,5 @@
+include 'variant.thrift'
+
 namespace csharp NodeApi
 namespace netcore NodeApi
 namespace java com.credits.leveldb.client.thrift
@@ -132,6 +134,7 @@ struct TransactionsGetResult
 struct TransactionFlowResult
 {
     1: APIResponse status
+	2: variant.variant smart_contract_result
 }
 
 // PoolListGet
