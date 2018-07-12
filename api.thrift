@@ -103,6 +103,7 @@ struct APIResponse
 {
     1: i8 code
     2: string message
+    3: variant.Variant scExecRetVal
 }
 
 // BalanceGet
@@ -134,7 +135,7 @@ struct TransactionsGetResult
 struct TransactionFlowResult
 {
     1: APIResponse status
-	2: variant.variant smart_contract_result
+	2: variant.Variant smart_contract_result
 }
 
 // PoolListGet
