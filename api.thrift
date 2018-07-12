@@ -104,7 +104,6 @@ struct APIResponse
 {
     1: i8 code
     2: string message
-    3: variant.Variant scExecRetVal
 }
 
 // BalanceGet
