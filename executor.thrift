@@ -1,5 +1,5 @@
 include "variant.thrift"
-namespace java com.credits.thrift
+namespace java com.credits.thrift.generated
 namespace cpp executor
 
 struct APIResponse
@@ -8,6 +8,7 @@ struct APIResponse
     2: string message
 	3: binary contractState
 	4: variant.Variant ret_val
+	5: map<string, variant.Variant> contractVariables
 }
 
 service ContractExecutor
