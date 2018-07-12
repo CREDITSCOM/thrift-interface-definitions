@@ -53,7 +53,8 @@ struct Transaction
     4: Amount amount
     5: Amount balance
     6: Currency currency
-    7: SmartContract smartContract
+    7: string signature
+    8: SmartContract smartContract
 }
 
 typedef list<Transaction> Transactions
