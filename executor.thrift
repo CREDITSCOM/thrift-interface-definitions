@@ -7,8 +7,8 @@ struct APIResponse
     1: i8 code
     2: string message
 	3: binary contractState
-	4: variant.Variant ret_val
-	5: map<string, variant.Variant> contractVariables
+	4: optional variant.Variant ret_val
+	5: optional map<string, variant.Variant> contractVariables
 }
 
 service ContractExecutor

@@ -135,7 +135,7 @@ struct TransactionsGetResult
 struct TransactionFlowResult
 {
     1: APIResponse status
-	2: variant.Variant smart_contract_result
+	2: optional variant.Variant smart_contract_result
 }
 
 // PoolListGet
