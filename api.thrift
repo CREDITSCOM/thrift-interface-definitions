@@ -28,12 +28,13 @@ typedef map<Currency, CumulativeAmount> Total;
 struct SmartContract
 {
   1: required string address;
-  2: string sourceCode;
-  3: binary byteCode;
-  4: binary contractState;
-  5: string hashState;
-  6: string method;
-  7: list<string> params;
+  2: string deployer
+  3: string sourceCode;
+  4: binary byteCode;
+  5: binary contractState;
+  6: string hashState;
+  7: string method;
+  8: list<string> params;
 }
 
 //
@@ -209,6 +210,12 @@ struct SmartContractsListGetResult
     2: SmartContractsList smartContractsList
 }
 
+struct SmartContractTransactionsListGetResult
+{
+    1: APIResponse status
+    2: Transactions transactions
+}
+
 service API
 {
     BalanceGetResult BalanceGet(1:Address address, 2:Currency currency = 'cs')
@@ -227,4 +234,5 @@ service API
     SmartContractGetResult SmartContractGet(1:Address address)
     SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
     SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
+    SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
 }
