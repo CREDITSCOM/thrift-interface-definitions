@@ -34,6 +34,7 @@ struct SmartContract
   5: string hashState;
   6: string method;
   7: list<string> params;
+  8: bool forgetNewState;
 }
 
 //
@@ -218,7 +219,10 @@ service API
     TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit)
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
 
-    PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit)
+	PoolHash GetLastHash()
+	PoolListGetResult PoolListGetStable(1:PoolHash hash, 2:i64 limit)
+
+    PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit) // deprecated
     PoolInfoGetResult PoolInfoGet(1:PoolHash hash, 2:i64 index)
     PoolTransactionsGetResult PoolTransactionsGet(1:PoolHash hash, 2:i64 index, 3:i64 offset, 4:i64 limit)
 
@@ -228,4 +232,6 @@ service API
     SmartContractGetResult SmartContractGet(1:Address address)
     SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
     SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
+
+	TransactionId WaitForSmartTransaction(1:Address smart_public)
 }
