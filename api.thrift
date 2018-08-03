@@ -6,7 +6,7 @@ namespace java com.credits.leveldb.client.thrift
 namespace cpp api
 
 typedef string Currency
-typedef string Address
+typedef binary Address
 typedef i64 Time
 
 struct Amount
@@ -27,15 +27,21 @@ typedef map<Currency, CumulativeAmount> Total;
 
 struct SmartContract
 {
-  1: required string address;
-  9: string deployer
-  2: string sourceCode;
-  3: binary byteCode;
-  4: binary contractState;
+  1: required Address address;
+  2: Address deployer
+  3: string sourceCode;
+  4: binary byteCode;
   5: string hashState;
-  6: string method;
-  7: list<string> params;
-  8: bool forgetNewState;
+}
+
+struct SmartContractInvocation
+{
+  1: string sourceCode;
+  2: binary byteCode;
+  3: string hashState;
+  4: string method;
+  5: list<string> params;
+  6: bool forgetNewState;
 }
 
 //
@@ -56,7 +62,7 @@ struct Transaction
     5: Amount balance
     6: Currency currency
     7: string signature
-    8: SmartContract smartContract
+    8: optional SmartContractInvocation smartContract
 }
 
 typedef list<Transaction> Transactions
@@ -196,7 +202,7 @@ struct SmartContractGetResult
 
 // SmartContractAddressListGetResult
 
-typedef list<string> SmartContractAddressList
+typedef list<Address> SmartContractAddressList
 struct SmartContractAddressesListGetResult
 {
     1: APIResponse status
