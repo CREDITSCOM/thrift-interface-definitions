@@ -48,16 +48,16 @@ struct SmartContractInvocation
 // Transactions
 //
 
-typedef string TransactionHash
-typedef string TransactionId
-typedef string TransactionInnerId
+struct TransactionId
+{
+	1: PoolHash poolHash
+	2: i32 index
+}
 
 struct Transaction
 {
-//  1: TransactionHash hash  // removed. Reason: field removed from db (since version csdb_v2)
-    1: TransactionInnerId innerId
     2: Address source
-    3: Address target  // now transaction allows set multiple destinations (since version csdb_v2)
+    3: Address target
     4: Amount amount
     5: Amount balance
     6: Currency currency
@@ -65,9 +65,10 @@ struct Transaction
     8: optional SmartContractInvocation smartContract
 }
 
-typedef list<Transaction> Transactions
-typedef list<TransactionId> TransactionIds
-typedef list<Address> Addresses
+struct SealedTransaction {
+	1: TransactionId id
+	2: Transaction trxn
+}
 
 //
 //  Pools
@@ -84,8 +85,6 @@ struct Pool
     4: i32 transactionsCount
     5: PoolNumber poolNumber
 }
-
-typedef list<Pool> Pools
 
 //
 //  Stats
@@ -128,7 +127,7 @@ struct TransactionGetResult
 {
     1: APIResponse status
     2: bool found
-    3: Transaction transaction
+    3: SealedTransaction transaction
 }
 
 // TransactionsGet
@@ -137,7 +136,7 @@ struct TransactionsGetResult
 {
     1: APIResponse status
     2: bool result
-    3: Transactions transactions
+    3: list<SealedTransaction> transactions
 }
 
 struct TransactionFlowResult
@@ -152,7 +151,7 @@ struct PoolListGetResult
 {
     1: APIResponse status
     2: bool result
-    3: Pools pools
+    3: list<Pool> pools
 }
 
 // PoolInfoGet
@@ -169,7 +168,7 @@ struct PoolInfoGetResult
 struct PoolTransactionsGetResult
 {
     1: APIResponse status
-    2: Transactions transactions
+    2: list<SealedTransaction> transactions
 }
 
 // StatsGet
@@ -180,17 +179,7 @@ struct StatsGetResult
     2: StatsPerPeriod stats
 }
 
-// NodesInfoGet
-
 typedef string NodeHash
-typedef list<NodeHash> NodesHashes
-
-struct NodesInfoGetResult
-{
-    1: APIResponse status
-    2: Count count
-    3: NodesHashes nodesHashes
-}
 
 // SmartContractGetResult
 
@@ -202,26 +191,18 @@ struct SmartContractGetResult
 
 // SmartContractAddressListGetResult
 
-typedef list<Address> SmartContractAddressList
 struct SmartContractAddressesListGetResult
 {
     1: APIResponse status
-    2: SmartContractAddressList addressesList
+    2: list<Address> addressesList
 }
 
 // SmartContractsListGetResult
 
-typedef list<SmartContract> SmartContractsList
 struct SmartContractsListGetResult
 {
     1: APIResponse status
-    2: SmartContractsList smartContractsList
-}
-
-struct SmartContractTransactionsListGetResult
-{
-    1: APIResponse status
-    2: Transactions transactions
+    2: list<SmartContract> smartContractsList
 }
 
 service API
@@ -237,10 +218,9 @@ service API
 
     PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit) // deprecated
     PoolInfoGetResult PoolInfoGet(1:PoolHash hash, 2:i64 index)
-    PoolTransactionsGetResult PoolTransactionsGet(1:PoolHash hash, 2:i64 index, 3:i64 offset, 4:i64 limit)
+    PoolTransactionsGetResult PoolTransactionsGet(1:PoolHash hash, 2:i64 offset, 3:i64 limit)
 
     StatsGetResult StatsGet()
-    NodesInfoGetResult NodesInfoGet()
 
     SmartContractGetResult SmartContractGet(1:Address address)
     SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
