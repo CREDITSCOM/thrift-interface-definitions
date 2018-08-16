@@ -56,13 +56,15 @@ struct TransactionId
 
 struct Transaction
 {
+    1: i64 id
     2: Address source
     3: Address target
     4: Amount amount
     5: Amount balance
     6: Currency currency
-    7: string signature
+    7: binary signature
     8: optional SmartContractInvocation smartContract
+    9: Amount fee
 }
 
 struct SealedTransaction {
