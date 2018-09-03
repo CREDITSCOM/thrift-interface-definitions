@@ -5,7 +5,7 @@ namespace netcore NodeApi
 namespace java com.credits.leveldb.client.thrift
 namespace cpp api
 
-typedef string Currency
+typedef i8 Currency
 typedef binary Address
 typedef i64 Time
 
@@ -209,7 +209,7 @@ struct SmartContractsListGetResult
 
 service API
 {
-    BalanceGetResult BalanceGet(1:Address address, 2:Currency currency = 'cs')
+    BalanceGetResult BalanceGet(1:Address address, 2:Currency currency = 1)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
     TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit)
