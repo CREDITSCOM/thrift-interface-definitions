@@ -228,6 +228,8 @@ service API
     SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
     SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
 
+    PoolHash WaitForBlock(1:PoolHash obsolete)
+
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
 }
