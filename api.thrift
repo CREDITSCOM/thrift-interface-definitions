@@ -212,24 +212,34 @@ service API
     BalanceGetResult BalanceGet(1:Address address, 2:Currency currency = 1)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
-    TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit)
+	// Get transactions where `address` is either sender or receiver
+    TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit) 
+	// Not for monitor. Transmit transaction to network for approval
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
 
+	// For tetris for now.
 	PoolHash GetLastHash()
+	// Was intended for use by web monitor. Never tested, get blocks starting from `hash` up to `limit` instances
 	PoolListGetResult PoolListGetStable(1:PoolHash hash, 2:i64 limit)
 
-    PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit) // deprecated
+	// For web monitor, used now. Get metainfo about pools skipping `offset` up to `limit` in amount
+    PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit)
+	// For web monitor. Get metainfo about block by hash
     PoolInfoGetResult PoolInfoGet(1:PoolHash hash, 2:i64 index)
+	// For web monitor. Get transactions from exactly `hash` pool, skipping `offset` and retrieiving at most `limit`
     PoolTransactionsGetResult PoolTransactionsGet(1:PoolHash hash, 2:i64 offset, 3:i64 limit)
 
+	// For web monitor. 
     StatsGetResult StatsGet()
 
     SmartContractGetResult SmartContractGet(1:Address address)
     SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
     SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
 
+	// Blocks until `obsolete` is not the last block in chain.
     PoolHash WaitForBlock(1:PoolHash obsolete)
 
+	// Blocks until transactions arrives to `smart_public`
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
 }
