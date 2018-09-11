@@ -1,3 +1,46 @@
+# credits.com Node Client API
+
+#### Notation and agreements
+
+Here and after we will call credits.com Blockchain Network Node simply the "node" or "Credits node", and any external client software simply the "client" or "external client".
+
+
+
+### General Information
+
+Credits node is a piece of software which provides access to replicated across a peer-to-peer verifiable append only database — the blockchain.  Transport layer of this network is beyond the scope of this document, while the network service for external clients certainly is. Attentive reader may have concluded that these two networks are separate.
+
+For relative simplicity of implementing external clients in a plethora of different programming languages Credits node uses Remote Procedure Call (RPC) Interface Description Language (IDL) called Apache Thrift (https://thrift.apache.org/). The choice of this technology was guided by it's rich type system and extensive language support while also implementing widely helpful language features such as exceptions.
+
+For now, Credits node handles Thrift requests arriving to two TCP ports: `8081` for web browser clients, for which Thrift officially supports only JSON-based serialization over HTTP transport as it seems after reading generated sources, and `9090` with `TBinaryProtocol` and `TSocket` transport for clients supporting it.
+
+Our complete API specification is placed in the end of current document. Further we will refer to it as `api.thrift`.
+
+Our complete API specification is placed in the end of current document. Further we will refer to it as `api.thrift`.
+
+Quoting Apache Thrift homepage, you can generate sources for your language using command like
+
+`$ thrift --gen <language> <path where you stored it>/api.thrift`
+
+where `$` denotes your command prompt invitation. <u>Beware!</u> If you use this command generated sources will be placed under your current working directory. See output of `thrift --help` for more options <u>and</u> language-specific help.
+
+
+
+## Gory details
+
+Further we will describe everything either not covered by comments in `api.thrift` at all or what was beyond ethical comment line size. If you feel something is missing, please contact our technical support and we will add it here or to the to-be-written ***FAQ*** section. 
+
+These are the points of attention which your author remembered at the time of writing:
+
+- 
+
+
+
+## Contents of `api.thrift`
+
+**Side note:** Auxiliary file `variant.thrift` is in section after this one.
+
+``` Thrift
 include 'variant.thrift'
 
 namespace csharp NodeApi
@@ -250,7 +293,30 @@ service API
     PoolHash WaitForBlock(1:PoolHash obsolete)
 
 	// Blocks till there are transactions arrived to `smart_address` 
-	// not yet reported by this method in current node's process lifetime.
+	// not yet seen in current node's process lifetime.
     TransactionId WaitForSmartTransaction(1:Address smart_address)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
 }
+
+```
+
+## Contents of `variant.thrift`
+
+``` Thrift
+namespace cpp variant
+namespace java com.credits.thrift.generated
+
+union Variant {
+	1: bool v_bool;
+	2: i8 v_i8;
+	3: i16 v_i16;
+	4: i32 v_i32;
+	5: i64 v_i64;
+	6: double v_double;
+	7: string v_string;
+	8: list<Variant> v_list;
+	9: set<Variant> v_set;
+	10: map<Variant, Variant> v_map;
+}
+```
+
