@@ -5,8 +5,11 @@ namespace netcore NodeApi
 namespace java com.credits.leveldb.client.thrift
 namespace cpp api
 
+// Currency code, 1 for mainline one (Credits, 'CS')
 typedef i8 Currency
+// Wallet or smart contract address
 typedef binary Address
+// Unix timestamp in milliseconds
 typedef i64 Time
 
 struct Amount
@@ -25,12 +28,14 @@ typedef map<Currency, Amount> Balance;
 
 typedef map<Currency, CumulativeAmount> Total;
 
+// Smart contract info
 struct SmartContract
 {
   1: required Address address;
   2: Address deployer
   3: string sourceCode;
   4: binary byteCode;
+  // Wrong name, here resides hash of smart contract's bytecode
   5: string hashState;
 }
 
@@ -38,9 +43,13 @@ struct SmartContractInvocation
 {
   1: string sourceCode;
   2: binary byteCode;
+  // Not processed, input only
   3: string hashState;
+  // Empty on deploy, method name of a smart contract class on execute
   4: string method;
+  // Empty on deploy, method params stringified Java-side with conversion to string on execute
   5: list<string> params;
+  // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
   6: bool forgetNewState;
 }
 
@@ -51,22 +60,33 @@ struct SmartContractInvocation
 struct TransactionId
 {
 	1: PoolHash poolHash
+	// Position inside of block
 	2: i32 index
 }
 
 struct Transaction
 {
+	// Inner transaction ID for protection against replay attack
     1: i64 id
+	// Giver if no smart contract invokation is present, otherwise deployer. 
+	// Generally, public key against of which signature is validated
     2: Address source
+	// Smart contract address if one's invokation is present, otherwise acceptor's address
     3: Address target
+	// Transfer amount for payment transaction
     4: Amount amount
+	// Wallet's view on it's balance
     5: Amount balance
     6: Currency currency
+	// Signature is formed against node's custom binary serialization format,
+	// see other docs for description
     7: binary signature
     8: optional SmartContractInvocation smartContract
+	// Max fee acceptable for donor to be subtracted
     9: Amount fee
 }
 
+// Structure for tranactions that have been emplaced to the blockchain
 struct SealedTransaction {
 	1: TransactionId id
 	2: Transaction trxn
@@ -77,13 +97,17 @@ struct SealedTransaction {
 //
 
 typedef binary PoolHash
+// Sequential index of block, starting with zero
 typedef i64 PoolNumber
 
 struct Pool
 {
     1: PoolHash hash
+	// Previous block hash
     2: PoolHash prevHash
+	// Timestamp from writer (?)
     3: Time time
+	// Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
 }
@@ -96,13 +120,19 @@ typedef i32 Count
 
 struct PeriodStats
 {
+	// Amount of milliseconds over which following aggregated results are reported
     1: Time periodDuration
+	// Amount of pools
     2: Count poolsCount
+	// Amount of transactionss
     3: Count transactionsCount
+	// Cumulative volume of each currency transferred
     4: Total balancePerCurrency
+	// Amount of smart contracts transactions
     5: Count smartContractsCount
 }
 
+// Periods are 24h, 1 month, 1 year, and cover-all period
 typedef list<PeriodStats> StatsPerPeriod
 
 //
@@ -111,11 +141,11 @@ typedef list<PeriodStats> StatsPerPeriod
 
 struct APIResponse
 {
+	// 0 for success, 1 for failure, 2 for not being implemented (currently unused)
     1: i8 code
+	// Explanation
     2: string message
 }
-
-// BalanceGet
 
 struct BalanceGetResult
 {
@@ -123,16 +153,12 @@ struct BalanceGetResult
     2: Amount amount
 }
 
-// TransactionGet
-
 struct TransactionGetResult
 {
     1: APIResponse status
     2: bool found
     3: SealedTransaction transaction
 }
-
-// TransactionsGet
 
 struct TransactionsGetResult
 {
@@ -147,16 +173,12 @@ struct TransactionFlowResult
 	2: optional variant.Variant smart_contract_result
 }
 
-// PoolListGet
-
 struct PoolListGetResult
 {
     1: APIResponse status
     2: bool result
     3: list<Pool> pools
 }
-
-// PoolInfoGet
 
 struct PoolInfoGetResult
 {
@@ -165,15 +187,11 @@ struct PoolInfoGetResult
     3: Pool pool
 }
 
-// PoolTransactionGet
-
 struct PoolTransactionsGetResult
 {
     1: APIResponse status
     2: list<SealedTransaction> transactions
 }
-
-// StatsGet
 
 struct StatsGetResult
 {
@@ -181,25 +199,17 @@ struct StatsGetResult
     2: StatsPerPeriod stats
 }
 
-typedef string NodeHash
-
-// SmartContractGetResult
-
 struct SmartContractGetResult
 {
     1: APIResponse status
     2: SmartContract smartContract
 }
 
-// SmartContractAddressListGetResult
-
 struct SmartContractAddressesListGetResult
 {
     1: APIResponse status
     2: list<Address> addressesList
 }
-
-// SmartContractsListGetResult
 
 struct SmartContractsListGetResult
 {
