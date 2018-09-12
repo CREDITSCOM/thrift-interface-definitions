@@ -35,6 +35,7 @@ These are the points of attention which your author remembered at the time of wr
 - Node's API blocks in `TransactionFlow` call when you deploy smart contract with it till the moment it is actually deployed i.e. is put to the blockchain meaning it arrives as a result of a consensus and considered valid. On the other hand, execution of smart contract is blocked in case of previous execution of the same contract has not (yet?) concluded successfully being it requested from the same node. 
 - **TOP SECRET** There is no validation of the same smart contract being executed concurrently on different nodes — last (w.r.t. transaction position in block) execution's state wins.
 - For reference: to deploy smart contract you need to set it's aimed address as a transaction target, put itself with it's bytecode and all the other stuff into `smartContract` field of transaction (consider checking Thrift docs that you do it right, it may be not so obvious to arrange for `optional` Thrift field to be set in your language of choice) , and make sure `method` field of that structure is set to empty string (`""`).  On the other hand to execute smart, `method` argument needs to be filled.
+- Public key which now plays a role of an wallet or smart contract address has length of 32 bytes and is generated with it's private counterpart using `ed25519`.
 
 
 
