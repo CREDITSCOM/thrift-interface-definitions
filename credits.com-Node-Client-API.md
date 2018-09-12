@@ -12,7 +12,7 @@ Credits node is a piece of software which provides access to replicated across a
 
 For relative simplicity of implementing external clients in a plethora of different programming languages Credits node uses Remote Procedure Call (RPC) Interface Description Language (IDL) called Apache Thrift (https://thrift.apache.org/). The choice of this technology was guided by it's rich type system and extensive language support while also implementing widely helpful language features such as exceptions.
 
-For now, Credits node handles Thrift requests arriving to two TCP ports: `8081` for web browser clients, for which Thrift officially supports only JSON-based serialization over HTTP transport as it seems after reading generated sources, and `9090` with `TBinaryProtocol` and `TSocket` transport for clients supporting it.
+For now, Credits node handles Thrift requests arriving to two TCP ports: `8081` for web-browser clients, for which Thrift officially supports only JSON-based serialization over HTTP transport as it seems after reading generated sources, and `9090` with `TBinaryProtocol` and `TSocket` transport for clients supporting it.
 
 Our complete API specification is placed in the end of current document. Further we will refer to it as `api.thrift`.
 
@@ -32,7 +32,9 @@ Further we will describe everything either not covered by comments in `api.thrif
 
 These are the points of attention which your author remembered at the time of writing:
 
-- 
+- Node's API blocks in `TransactionFlow` call when you deploy smart contract with it till the moment it is actually deployed i.e. is put to the blockchain meaning it arrives as a result of a consensus and considered valid. On the other hand, execution of smart contract is blocked in case of previous execution of the same contract has not (yet?) concluded successfully being it requested from the same node. 
+- **TOP SECRET** There is no validation of the same smart contract being executed concurrently on different nodes — last (w.r.t. transaction position in block) execution's state wins.
+- For reference: to deploy smart contract you need to set it's aimed address as a transaction target, put itself with it's bytecode and all the other stuff into `smartContract` field of transaction (consider checking Thrift docs that you do it right, it may be not so obvious to arrange for `optional` Thrift field to be set in your language of choice) , and make sure `method` field of that structure is set to empty string (`""`).  On the other hand to execute smart, `method` argument needs to be filled.
 
 
 
