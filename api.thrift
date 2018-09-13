@@ -48,6 +48,8 @@ struct SmartContractInvocation
 // Transactions
 //
 
+typedef i64 TransactionInnerId
+
 struct TransactionId
 {
 	1: PoolHash poolHash
@@ -56,7 +58,7 @@ struct TransactionId
 
 struct Transaction
 {
-    1: i64 id
+    1: TransactionInnerId id
     2: Address source
     3: Address target
     4: Amount amount
@@ -89,6 +91,19 @@ struct Pool
 }
 
 //
+// Wallets
+//
+
+typedef i32 WalletId
+
+struct WalletData
+{
+    1: WalletId walletId
+    2: Amount balance
+    3: TransactionInnerId lastTransactionId
+}
+
+//
 //  Stats
 //
 
@@ -115,12 +130,12 @@ struct APIResponse
     2: string message
 }
 
-// BalanceGet
+// WalletDataGet
 
-struct BalanceGetResult
+struct WalletDataGetResult
 {
     1: APIResponse status
-    2: Amount amount
+    2: WalletData walletData
 }
 
 // TransactionGet
@@ -209,7 +224,7 @@ struct SmartContractsListGetResult
 
 service API
 {
-    BalanceGetResult BalanceGet(1:Address address, 2:Currency currency = 1)
+    WalletDataGetResult WalletDataGet(1:Address address)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
     TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit)
