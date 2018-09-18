@@ -130,12 +130,30 @@ struct APIResponse
     2: string message
 }
 
-// WalletDataGet
+// Wallets data
 
 struct WalletDataGetResult
 {
     1: APIResponse status
     2: WalletData walletData
+}
+
+struct WalletIdGetResult
+{
+    1: APIResponse status
+    2: WalletId walletId
+}
+
+struct WalletTransactionsCountGetResult
+{
+    1: APIResponse status
+    2: TransactionInnerId lastTransactionInnerId
+}
+
+struct WalletBalanceGetResult
+{
+    1: APIResponse status
+    2: Amount balance
 }
 
 // TransactionGet
@@ -225,6 +243,9 @@ struct SmartContractsListGetResult
 service API
 {
     WalletDataGetResult WalletDataGet(1:Address address)
+    WalletIdGetResult WalletIdGet(1:Address address)
+    WalletTransactionsCountGetResult WalletTransactionsCountGet(1:Address address)
+    WalletBalanceGetResult WalletBalanceGet(1:Address address)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
     TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit)
