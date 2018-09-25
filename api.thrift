@@ -32,6 +32,7 @@ struct SmartContract
   3: string sourceCode;
   4: binary byteCode;
   5: string hashState;
+  6: binary objectState
 }
 
 struct SmartContractInvocation
@@ -40,7 +41,7 @@ struct SmartContractInvocation
   2: binary byteCode;
   3: string hashState;
   4: string method;
-  5: list<string> params;
+  5: list<variant.Variant> params;
   6: bool forgetNewState;
 }
 
@@ -156,13 +157,20 @@ struct WalletBalanceGetResult
     2: Amount balance
 }
 
+enum TransactionState {
+    INVALID = 0,
+    VALID,
+    ISPROGRESS
+} 
+
 // TransactionGet
 
 struct TransactionGetResult
 {
     1: APIResponse status
     2: bool found
-    3: SealedTransaction transaction
+	3: TransactionState state
+    4: SealedTransaction transaction
 }
 
 // TransactionsGet
