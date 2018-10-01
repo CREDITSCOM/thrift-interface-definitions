@@ -15,6 +15,11 @@ struct Amount
   2: required i64 fraction = 0;
 }
 
+struct AmountCommission
+{
+  1: required i16 commission = 0;
+}
+
 struct CumulativeAmount
 {
   1: required i64 integral = 0;
@@ -67,7 +72,7 @@ struct Transaction
     6: Currency currency
     7: binary signature
     8: optional SmartContractInvocation smartContract
-    9: Amount fee
+    9: AmountCommission fee
 }
 
 struct SealedTransaction {
