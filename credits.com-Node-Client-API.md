@@ -1,3 +1,49 @@
+# credits.com Node Client API
+
+#### Notation and agreements
+
+Here and after we will call credits.com Blockchain Network Node simply the "node" or "Credits node", and any external client software simply the "client" or "external client".
+
+
+
+### General Information
+
+Credits node is a piece of software which provides access to replicated across a peer-to-peer verifiable append only database — the blockchain.  Transport layer of this network is beyond the scope of this document, while the network service for external clients certainly is. Attentive reader may have concluded that these two networks are separate.
+
+For relative simplicity of implementing external clients in a plethora of different programming languages Credits node uses Remote Procedure Call (RPC) Interface Description Language (IDL) called Apache Thrift (https://thrift.apache.org/). The choice of this technology was guided by it's rich type system and extensive language support while also implementing widely helpful language features such as exceptions.
+
+For now, Credits node handles Thrift requests arriving to two TCP ports: `8081` for web-browser clients, for which Thrift officially supports only JSON-based serialization over HTTP transport as it seems after reading generated sources, and `9090` with `TBinaryProtocol` and `TSocket` transport for clients supporting it.
+
+Our complete API specification is placed in the end of current document. Further we will refer to it as `api.thrift`.
+
+Our complete API specification is placed in the end of current document. Further we will refer to it as `api.thrift`.
+
+Quoting Apache Thrift homepage, you can generate sources for your language using command like
+
+`$ thrift --gen <language> <path where you stored it>/api.thrift`
+
+where `$` denotes your command prompt invitation. <u>Beware!</u> If you use this command generated sources will be placed under your current working directory. See output of `thrift --help` for more options <u>and</u> language-specific help.
+
+
+
+## Gory details
+
+Further we will describe everything either not covered by comments in `api.thrift` at all or what was beyond ethical comment line size. If you feel something is missing, please contact our technical support and we will add it here or to the to-be-written ***FAQ*** section. 
+
+These are the points of attention which your author remembered at the time of writing:
+
+- Node's API blocks in `TransactionFlow` call when you deploy smart contract with it till the moment it is actually deployed i.e. is put to the blockchain meaning it arrives as a result of a consensus and considered valid. On the other hand, execution of smart contract is blocked in case of previous execution of the same contract has not (yet?) concluded successfully being it requested from the same node. 
+- **TOP SECRET** There is no validation of the same smart contract being executed concurrently on different nodes — last (w.r.t. transaction position in block) execution's state wins.
+- For reference: to deploy smart contract you need to set it's aimed address as a transaction target, put itself with it's bytecode and all the other stuff into `smartContract` field of transaction (consider checking Thrift docs that you do it right, it may be not so obvious to arrange for `optional` Thrift field to be set in your language of choice) , and make sure `method` field of that structure is set to empty string (`""`).  On the other hand to execute smart, `method` argument needs to be filled.
+- Public key which now plays a role of an wallet or smart contract address has length of 32 bytes and is generated with it's private counterpart using `ed25519`.
+
+
+
+## Contents of `api.thrift`
+
+**Side note:** Auxiliary file `variant.thrift` is in section after this one.
+
+``` Thrift
 include 'variant.thrift'
 
 namespace csharp NodeApi
@@ -16,11 +62,6 @@ struct Amount
 {
   1: required i32 integral = 0;
   2: required i64 fraction = 0;
-}
-
-struct AmountCommission
-{
-  1: required i16 commission = 0;
 }
 
 struct CumulativeAmount
@@ -42,7 +83,6 @@ struct SmartContract
   4: binary byteCode;
   // Wrong name, here resides hash of smart contract's bytecode
   5: string hashState;
-  6: binary objectState
 }
 
 struct SmartContractInvocation
@@ -54,7 +94,7 @@ struct SmartContractInvocation
   // Empty on deploy, method name of a smart contract class on execute
   4: string method;
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  5: list<variant.Variant> params;
+  5: list<string> params;
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
   6: bool forgetNewState;
 }
@@ -62,8 +102,6 @@ struct SmartContractInvocation
 //
 // Transactions
 //
-
-typedef i64 TransactionInnerId
 
 struct TransactionId
 {
@@ -75,7 +113,7 @@ struct TransactionId
 struct Transaction
 {
 	// Inner transaction ID for protection against replay attack
-    1: TransactionInnerId id
+    1: i64 id
 	// Giver if no smart contract invokation is present, otherwise deployer. 
 	// Generally, public key against of which signature is validated
     2: Address source
@@ -91,7 +129,7 @@ struct Transaction
     7: binary signature
     8: optional SmartContractInvocation smartContract
 	// Max fee acceptable for donor to be subtracted
-    9: AmountCommission fee
+    9: Amount fee
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
@@ -118,19 +156,6 @@ struct Pool
 	// Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
-}
-
-//
-// Wallets
-//
-
-typedef i32 WalletId
-
-struct WalletData
-{
-    1: WalletId walletId
-    2: Amount balance
-    3: TransactionInnerId lastTransactionId
 }
 
 //
@@ -168,49 +193,18 @@ struct APIResponse
     2: string message
 }
 
-// Wallets data
-
-struct WalletDataGetResult
+struct BalanceGetResult
 {
     1: APIResponse status
-    2: WalletData walletData
+    2: Amount amount
 }
-
-struct WalletIdGetResult
-{
-    1: APIResponse status
-    2: WalletId walletId
-}
-
-struct WalletTransactionsCountGetResult
-{
-    1: APIResponse status
-    2: TransactionInnerId lastTransactionInnerId
-}
-
-struct WalletBalanceGetResult
-{
-    1: APIResponse status
-    2: Amount balance
-}
-
-enum TransactionState {
-    INVALID = 0,
-    VALID,
-    ISPROGRESS
-} 
-
-// TransactionGet
 
 struct TransactionGetResult
 {
     1: APIResponse status
     2: bool found
-    3: TransactionState state
-    4: SealedTransaction transaction
+    3: SealedTransaction transaction
 }
-
-// TransactionsGet
 
 struct TransactionsGetResult
 {
@@ -225,16 +219,12 @@ struct TransactionFlowResult
 	2: optional variant.Variant smart_contract_result
 }
 
-// PoolListGet
-
 struct PoolListGetResult
 {
     1: APIResponse status
     2: bool result
     3: list<Pool> pools
 }
-
-// PoolInfoGet
 
 struct PoolInfoGetResult
 {
@@ -243,15 +233,11 @@ struct PoolInfoGetResult
     3: Pool pool
 }
 
-// PoolTransactionGet
-
 struct PoolTransactionsGetResult
 {
     1: APIResponse status
     2: list<SealedTransaction> transactions
 }
-
-// StatsGet
 
 struct StatsGetResult
 {
@@ -259,25 +245,17 @@ struct StatsGetResult
     2: StatsPerPeriod stats
 }
 
-typedef string NodeHash
-
-// SmartContractGetResult
-
 struct SmartContractGetResult
 {
     1: APIResponse status
     2: SmartContract smartContract
 }
 
-// SmartContractAddressListGetResult
-
 struct SmartContractAddressesListGetResult
 {
     1: APIResponse status
     2: list<Address> addressesList
 }
-
-// SmartContractsListGetResult
 
 struct SmartContractsListGetResult
 {
@@ -287,10 +265,7 @@ struct SmartContractsListGetResult
 
 service API
 {
-    WalletDataGetResult WalletDataGet(1:Address address)
-    WalletIdGetResult WalletIdGet(1:Address address)
-    WalletTransactionsCountGetResult WalletTransactionsCountGet(1:Address address)
-    WalletBalanceGetResult WalletBalanceGet(1:Address address)
+    BalanceGetResult BalanceGet(1:Address address, 2:Currency currency = 1)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
 	// Get transactions where `address` is either sender or receiver
@@ -304,7 +279,7 @@ service API
 	PoolListGetResult PoolListGetStable(1:PoolHash hash, 2:i64 limit)
 
 	// For web monitor, used now. Get metainfo about pools skipping `offset` up to `limit` in amount
-    PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit) // deprecated
+    PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit)
 	// For web monitor. Get metainfo about block by hash
     PoolInfoGetResult PoolInfoGet(1:PoolHash hash, 2:i64 index)
 	// For web monitor. Get transactions from exactly `hash` pool, skipping `offset` and retrieiving at most `limit`
@@ -321,7 +296,30 @@ service API
     PoolHash WaitForBlock(1:PoolHash obsolete)
 
 	// Blocks till there are transactions arrived to `smart_address` 
-	// not yet reported by this method in current node's process lifetime.
-    TransactionId WaitForSmartTransaction(1:Address smart_public)
+	// not yet seen in current node's process lifetime.
+    TransactionId WaitForSmartTransaction(1:Address smart_address)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
 }
+
+```
+
+## Contents of `variant.thrift`
+
+``` Thrift
+namespace cpp variant
+namespace java com.credits.thrift.generated
+
+union Variant {
+	1: bool v_bool;
+	2: i8 v_i8;
+	3: i16 v_i16;
+	4: i32 v_i32;
+	5: i64 v_i64;
+	6: double v_double;
+	7: string v_string;
+	8: list<Variant> v_list;
+	9: set<Variant> v_set;
+	10: map<Variant, Variant> v_map;
+}
+```
+
