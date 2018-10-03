@@ -197,7 +197,7 @@ struct WalletBalanceGetResult
 enum TransactionState {
     INVALID = 0,
     VALID,
-    ISPROGRESS
+    INPROGRES
 } 
 
 // TransactionGet
@@ -207,7 +207,8 @@ struct TransactionGetResult
     1: APIResponse status
     2: bool found
     3: TransactionState state
-    4: SealedTransaction transaction
+    4: i32 roundNum
+    5: SealedTransaction transaction
 }
 
 // TransactionsGet
