@@ -286,6 +286,13 @@ struct SmartContractsListGetResult
     2: list<SmartContract> smartContractsList
 }
 
+struct TransactionsStateGetResult
+{
+	1: APIResponse status
+	2: map<TransactionInnerId, TransactionState> states
+	3: i32 roundNum
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:Address address)
@@ -325,4 +332,5 @@ service API
 	// not yet reported by this method in current node's process lifetime.
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
+	TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
 }
