@@ -332,5 +332,5 @@ service API
 	// not yet reported by this method in current node's process lifetime.
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
-	TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
+    TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
 }
