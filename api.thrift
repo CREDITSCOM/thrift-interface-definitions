@@ -151,6 +151,7 @@ struct PeriodStats
     4: Total balancePerCurrency
 	// Amount of smart contracts transactions
     5: Count smartContractsCount
+	6: Count transactionsSmartCount
 }
 
 // Periods are 24h, 1 month, 1 year, and cover-all period
@@ -293,6 +294,14 @@ struct TransactionsStateGetResult
 	3: i32 roundNum
 }
 
+struct SmartMethodParamsGetResult
+{
+	1: APIResponse status
+	2: string method;
+	3: list<variant.Variant> params;
+
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:Address address)
@@ -333,4 +342,5 @@ service API
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
+    SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:i64 id)
 }
