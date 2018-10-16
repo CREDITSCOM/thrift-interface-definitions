@@ -293,6 +293,18 @@ struct TransactionsStateGetResult
 	3: i32 roundNum
 }
 
+struct MethodDescription {
+    1: string name
+    2: list<string> argTypes
+    3: string returnType
+}
+
+struct ContractAllMethodsGetResult {
+    1: i8 code
+    2: string message
+    3: list<MethodDescription> methods
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:Address address)
@@ -333,4 +345,5 @@ service API
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
+	ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
 }
