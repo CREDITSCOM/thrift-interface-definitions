@@ -67,37 +67,37 @@ typedef i64 TransactionInnerId
 
 struct TransactionId
 {
-	1: PoolHash poolHash
-	// Position inside of block
-	2: i32 index
+    1: PoolHash poolHash
+    // Position inside of block
+    2: i32 index
 }
 
 struct Transaction
 {
-	// Inner transaction ID for protection against replay attack
+    // Inner transaction ID for protection against replay attack
     1: TransactionInnerId id
-	// Giver if no smart contract invokation is present, otherwise deployer. 
-	// Generally, public key against of which signature is validated
+    // Giver if no smart contract invokation is present, otherwise deployer. 
+    // Generally, public key against of which signature is validated
     2: Address source
-	// Smart contract address if one's invokation is present, otherwise acceptor's address
+    // Smart contract address if one's invokation is present, otherwise acceptor's address
     3: Address target
-	// Transfer amount for payment transaction
+    // Transfer amount for payment transaction
     4: Amount amount
-	// Wallet's view on it's balance
+    // Wallet's view on it's balance
     5: Amount balance
     6: Currency currency
-	// Signature is formed against node's custom binary serialization format,
-	// see other docs for description
+    // Signature is formed against node's custom binary serialization format,
+    // see other docs for description
     7: binary signature
     8: optional SmartContractInvocation smartContract
-	// Max fee acceptable for donor to be subtracted
+    // Max fee acceptable for donor to be subtracted
     9: AmountCommission fee
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
 struct SealedTransaction {
-	1: TransactionId id
-	2: Transaction trxn
+    1: TransactionId id
+    2: Transaction trxn
 }
 
 //
@@ -111,11 +111,11 @@ typedef i64 PoolNumber
 struct Pool
 {
     1: PoolHash hash
-	// Previous block hash
+    // Previous block hash
     2: PoolHash prevHash
-	// Timestamp from writer (?)
+    // Timestamp from writer (?)
     3: Time time
-	// Amount of transactions in this block
+    // Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
 }
@@ -151,7 +151,7 @@ struct PeriodStats
     4: Total balancePerCurrency
 	// Amount of smart contracts transactions
     5: Count smartContractsCount
-	6: Count transactionsSmartCount
+    6: Count transactionsSmartCount
 }
 
 // Periods are 24h, 1 month, 1 year, and cover-all period
@@ -224,7 +224,7 @@ struct TransactionsGetResult
 struct TransactionFlowResult
 {
     1: APIResponse status
-	2: optional variant.Variant smart_contract_result
+    2: optional variant.Variant smart_contract_result
 }
 
 // PoolListGet
@@ -289,16 +289,16 @@ struct SmartContractsListGetResult
 
 struct TransactionsStateGetResult
 {
-	1: APIResponse status
-	2: map<TransactionInnerId, TransactionState> states
-	3: i32 roundNum
+    1: APIResponse status
+    2: map<TransactionInnerId, TransactionState> states
+    3: i32 roundNum
 }
 
 struct SmartMethodParamsGetResult
 {
-	1: APIResponse status
-	2: string method;
-	3: list<variant.Variant> params;
+    1: APIResponse status
+    2: string method;
+    3: list<variant.Variant> params;
 
 }
 
@@ -322,38 +322,38 @@ service API
     WalletBalanceGetResult WalletBalanceGet(1:Address address)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
-	// Get transactions where `address` is either sender or receiver
+    // Get transactions where `address` is either sender or receiver
     TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit) 
-	// Not for monitor. Transmit transaction to network for approval
+    // Not for monitor. Transmit transaction to network for approval
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
 
-	// For tetris for now.
-	PoolHash GetLastHash()
-	// Was intended for use by web monitor. Never tested, get blocks starting from `hash` up to `limit` instances
-	PoolListGetResult PoolListGetStable(1:PoolHash hash, 2:i64 limit)
+    // For tetris for now.
+    PoolHash GetLastHash()
+    // Was intended for use by web monitor. Never tested, get blocks starting from `hash` up to `limit` instances
+    PoolListGetResult PoolListGetStable(1:PoolHash hash, 2:i64 limit)
 
-	// For web monitor, used now. Get metainfo about pools skipping `offset` up to `limit` in amount
+    // For web monitor, used now. Get metainfo about pools skipping `offset` up to `limit` in amount
     PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit) // deprecated
-	// For web monitor. Get metainfo about block by hash
+    // For web monitor. Get metainfo about block by hash
     PoolInfoGetResult PoolInfoGet(1:PoolHash hash, 2:i64 index)
-	// For web monitor. Get transactions from exactly `hash` pool, skipping `offset` and retrieiving at most `limit`
+    // For web monitor. Get transactions from exactly `hash` pool, skipping `offset` and retrieiving at most `limit`
     PoolTransactionsGetResult PoolTransactionsGet(1:PoolHash hash, 2:i64 offset, 3:i64 limit)
 
-	// For web monitor. 
+    // For web monitor. 
     StatsGetResult StatsGet()
 
     SmartContractGetResult SmartContractGet(1:Address address)
     SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
     SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
 
-	// Blocks till `obsolete` is not the last block in chain.
+    // Blocks till `obsolete` is not the last block in chain.
     PoolHash WaitForBlock(1:PoolHash obsolete)
 
-	// Blocks till there are transactions arrived to `smart_address` 
-	// not yet reported by this method in current node's process lifetime.
+    // Blocks till there are transactions arrived to `smart_address` 
+    // not yet reported by this method in current node's process lifetime.
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
-	ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
+    ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:i64 id)
 }
