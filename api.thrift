@@ -198,7 +198,7 @@ struct WalletBalanceGetResult
 enum TransactionState {
     INVALID = 0,
     VALID,
-    INPROGRES
+    INPROGRESS
 } 
 
 // TransactionGet
