@@ -355,5 +355,5 @@ service API
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
     ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
-    SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:i64 id)
+    SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:TransactionInnerId id)
 }
