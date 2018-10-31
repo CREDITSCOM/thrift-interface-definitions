@@ -225,6 +225,7 @@ struct TransactionFlowResult
 {
     1: APIResponse status
     2: optional variant.Variant smart_contract_result
+    3: i32 roundNum
 }
 
 // PoolListGet
