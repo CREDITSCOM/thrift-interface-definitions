@@ -2,7 +2,7 @@ include 'variant.thrift'
 
 namespace csharp NodeApi
 namespace netcore NodeApi
-namespace java com.credits.leveldb.client.thrift
+namespace java com.credits.client.node.thrift.generated
 namespace cpp api
 
 // Currency code, 1 for mainline one (Credits, 'CS')
