@@ -321,7 +321,7 @@ struct MembersSmartContractGetResult {
     3: string owner
 	4: string decimal
 	5: string totalCoins
-	6: string symbol
+    6: string symbol
 }
 
 service API
