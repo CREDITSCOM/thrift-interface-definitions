@@ -315,6 +315,15 @@ struct ContractAllMethodsGetResult {
     3: list<MethodDescription> methods
 }
 
+struct MembersSmartContractGetResult {
+    1: APIResponse status
+    2: string name
+    3: string owner
+	4: string decimal
+	5: string totalCoins
+	6: string symbol
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:Address address)
@@ -357,4 +366,5 @@ service API
     TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
     ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:TransactionInnerId id)
+	MembersSmartContractGetResult MembersSmartContractGet(1:TransactionId transactionId)
 }
