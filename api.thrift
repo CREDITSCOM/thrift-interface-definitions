@@ -92,6 +92,7 @@ struct Transaction
     8: optional SmartContractInvocation smartContract
     // Max fee acceptable for donor to be subtracted
     9: AmountCommission fee
+	10: i64 timeCreation
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
