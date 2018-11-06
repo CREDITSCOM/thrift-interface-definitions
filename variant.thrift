@@ -1,6 +1,6 @@
 
 namespace cpp variant
-namespace java com.credits.thrift.generated
+namespace java com.credits.general.thrift.generated
 
 union Variant {
 	1: bool v_bool;

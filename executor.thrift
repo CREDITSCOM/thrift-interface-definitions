@@ -1,5 +1,5 @@
 include "variant.thrift"
-namespace java com.credits.thrift.generated
+namespace java com.credits.client.executor.thrift.generated
 namespace cpp executor
 
 struct APIResponse{
