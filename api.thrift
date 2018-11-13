@@ -214,12 +214,18 @@ struct TransactionGetResult
 }
 
 // TransactionsGet
+struct TrxnsCount
+{
+    1: i64 sendCount
+	2: i64 recvCount
+}
 
 struct TransactionsGetResult
 {
     1: APIResponse status
     2: bool result
     3: list<SealedTransaction> transactions
+	4: TrxnsCount totalTrxns
 }
 
 struct TransactionFlowResult
