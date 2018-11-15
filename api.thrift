@@ -36,29 +36,29 @@ typedef map<Currency, CumulativeAmount> Total;
 // Smart contract info
 struct SmartContract
 {
-  1: required Address address;
+  1: required Address address
   2: Address deployer
-  3: string sourceCode;
-  4: binary byteCode;
-  // Wrong name, here resides hash of smart contract's bytecode
-  5: string hashState;
-  6: binary objectState
+  3: SmartContractDeploy smartContractDeploy
+  4: binary objectState
 }
+
+struct SmartContractDeploy
+{
+  1: string sourceCode
+  2: binary byteCode
+  3: string hashState
+  4: i16 tokenStandart	
+} 
 
 struct SmartContractInvocation
 {
-  1: string sourceCode;
-  2: binary byteCode;
-  // Not processed, input only
-  3: string hashState;
-  // Empty on deploy, method name of a smart contract class on execute
-  4: string method;
+  1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  5: list<general.Variant> params;
+  2: list<general.Variant> params
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  6: bool forgetNewState;
+  3: bool forgetNewState
+  4: optional SmartContractDeploy smartContractDeploy
 }
-
 //
 // Transactions
 //
