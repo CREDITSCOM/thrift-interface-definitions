@@ -33,6 +33,14 @@ typedef map<Currency, Amount> Balance;
 
 typedef map<Currency, CumulativeAmount> Total;
 
+struct SmartContractDeploy
+{
+  1: string sourceCode
+  2: binary byteCode
+  3: string hashState
+  4: i16 tokenStandart	
+}
+
 // Smart contract info
 struct SmartContract
 {
@@ -40,14 +48,6 @@ struct SmartContract
   2: Address deployer
   3: SmartContractDeploy smartContractDeploy
   4: binary objectState
-}
-
-struct SmartContractDeploy
-{
-  1: string sourceCode
-  2: binary byteCode
-  3: string hashState
-  4: i16 tokenStandart	
 } 
 
 struct SmartContractInvocation
