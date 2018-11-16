@@ -1,6 +1,5 @@
-
-namespace cpp variant
 namespace java com.credits.general.thrift.generated
+namespace cpp general
 
 union Variant {
 	1: bool v_bool;
@@ -13,4 +12,16 @@ union Variant {
 	8: list<Variant> v_list;
 	9: set<Variant> v_set;
 	10: map<Variant, Variant> v_map;
+}
+
+//
+// API responses
+//
+
+struct APIResponse
+{
+	// 0 for success, 1 for failure, 2 for not being implemented (currently unused)
+    1: i8 code
+	// Explanation
+    2: string message
 }

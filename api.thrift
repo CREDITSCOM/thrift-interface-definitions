@@ -1,4 +1,4 @@
-include 'variant.thrift'
+include 'general.thrift'
 
 namespace csharp NodeApi
 namespace netcore NodeApi
@@ -36,29 +36,29 @@ typedef map<Currency, CumulativeAmount> Total;
 // Smart contract info
 struct SmartContract
 {
-  1: required Address address;
+  1: required Address address
   2: Address deployer
-  3: string sourceCode;
-  4: binary byteCode;
-  // Wrong name, here resides hash of smart contract's bytecode
-  5: string hashState;
-  6: binary objectState
+  3: SmartContractDeploy smartContractDeploy
+  4: binary objectState
 }
+
+struct SmartContractDeploy
+{
+  1: string sourceCode
+  2: binary byteCode
+  3: string hashState
+  4: i16 tokenStandart	
+} 
 
 struct SmartContractInvocation
 {
-  1: string sourceCode;
-  2: binary byteCode;
-  // Not processed, input only
-  3: string hashState;
-  // Empty on deploy, method name of a smart contract class on execute
-  4: string method;
+  1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  5: list<variant.Variant> params;
+  2: list<general.Variant> params
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  6: bool forgetNewState;
+  3: bool forgetNewState
+  4: optional SmartContractDeploy smartContractDeploy
 }
-
 //
 // Transactions
 //
@@ -93,6 +93,8 @@ struct Transaction
     // Max fee acceptable for donor to be subtracted
     9: AmountCommission fee
 	10: i64 timeCreation
+	// user fields
+	11: optional binary userFields
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
@@ -158,41 +160,29 @@ struct PeriodStats
 // Periods are 24h, 1 month, 1 year, and cover-all period
 typedef list<PeriodStats> StatsPerPeriod
 
-//
-// API responses
-//
-
-struct APIResponse
-{
-	// 0 for success, 1 for failure, 2 for not being implemented (currently unused)
-    1: i8 code
-	// Explanation
-    2: string message
-}
-
 // Wallets data
 
 struct WalletDataGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: WalletData walletData
 }
 
 struct WalletIdGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: WalletId walletId
 }
 
 struct WalletTransactionsCountGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: TransactionInnerId lastTransactionInnerId
 }
 
 struct WalletBalanceGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: Amount balance
 }
 
@@ -206,7 +196,7 @@ enum TransactionState {
 
 struct TransactionGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: bool found
     3: TransactionState state
     4: i32 roundNum
@@ -222,7 +212,7 @@ struct TrxnsCount
 
 struct TransactionsGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: bool result
     3: list<SealedTransaction> transactions
 	4: TrxnsCount totalTrxns
@@ -230,8 +220,8 @@ struct TransactionsGetResult
 
 struct TransactionFlowResult
 {
-    1: APIResponse status
-    2: optional variant.Variant smart_contract_result
+    1: general.APIResponse status
+    2: optional general.Variant smart_contract_result
     3: i32 roundNum
 }
 
@@ -239,7 +229,7 @@ struct TransactionFlowResult
 
 struct PoolListGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: bool result
     3: list<Pool> pools
 }
@@ -248,7 +238,7 @@ struct PoolListGetResult
 
 struct PoolInfoGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: bool isFound
     3: Pool pool
 }
@@ -257,7 +247,7 @@ struct PoolInfoGetResult
 
 struct PoolTransactionsGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: list<SealedTransaction> transactions
 }
 
@@ -265,7 +255,7 @@ struct PoolTransactionsGetResult
 
 struct StatsGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: StatsPerPeriod stats
 }
 
@@ -275,7 +265,7 @@ typedef string NodeHash
 
 struct SmartContractGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: SmartContract smartContract
 }
 
@@ -283,7 +273,7 @@ struct SmartContractGetResult
 
 struct SmartContractAddressesListGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: list<Address> addressesList
 }
 
@@ -291,22 +281,22 @@ struct SmartContractAddressesListGetResult
 
 struct SmartContractsListGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: list<SmartContract> smartContractsList
 }
 
 struct TransactionsStateGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: map<TransactionInnerId, TransactionState> states
     3: i32 roundNum
 }
 
 struct SmartMethodParamsGetResult
 {
-    1: APIResponse status
+    1: general.APIResponse status
     2: string method;
-    3: list<variant.Variant> params;
+    3: list<general.Variant> params;
 
 }
 
@@ -323,7 +313,7 @@ struct ContractAllMethodsGetResult {
 }
 
 struct MembersSmartContractGetResult {
-    1: APIResponse status
+    1: general.APIResponse status
     2: string name
     3: string owner
 	4: string decimal
