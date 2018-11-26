@@ -93,8 +93,8 @@ struct Transaction
     // Max fee acceptable for donor to be subtracted
     9: AmountCommission fee
 	10: i64 timeCreation
-	// user fields
-	11: optional binary userFields
+	// comment
+	11: optional binary comment
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
