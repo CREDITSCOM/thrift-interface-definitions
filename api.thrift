@@ -300,10 +300,21 @@ struct SmartMethodParamsGetResult
 
 }
 
-struct MethodDescription {
+/*struct MethodDescription {
     1: string name
     2: list<string> argTypes
     3: string returnType
+}*/
+
+struct MethodArgument {
+  1: string type
+  2: string name
+}
+
+struct MethodDescription {
+  1: string returnType
+  2: string name
+  3: list<MethodArgument> arguments
 }
 
 struct ContractAllMethodsGetResult {
@@ -320,6 +331,41 @@ struct MembersSmartContractGetResult {
 	5: string totalCoins
     6: string symbol
 }
+
+////////
+enum TokenStandart
+{
+    NotAToken = 0,
+    CreditsBasic = 1,
+    CreditsExtended = 2
+}
+// Smart contracts
+
+struct SmartContractMethodArgument {
+    1: string type
+    2: string name
+}
+
+struct SmartContractMethod {
+    1: string returnType
+    2: string name
+    3: list<SmartContractMethodArgument> arguments
+}
+
+struct SmartContractDataResult
+{
+    1: general.APIResponse status;
+    2: list<SmartContractMethod> methods;
+    3: map<string, general.Variant> variables
+}
+
+struct SmartContractCompileResult
+{
+    1: general.APIResponse status;
+    2: binary byteCode;
+    3: TokenStandart ts;
+}
+////////
 
 service API
 {
@@ -364,4 +410,10 @@ service API
     ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:TransactionInnerId id)
 	MembersSmartContractGetResult MembersSmartContractGet(1:TransactionId transactionId)
+	
+	////////new
+	// Smart contracts
+    SmartContractDataResult SmartContractDataGet(1:Address address)
+    SmartContractCompileResult SmartContractCompile(1:string sourceCode)
+	////////new
 }
