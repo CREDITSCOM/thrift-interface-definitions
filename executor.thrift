@@ -17,12 +17,12 @@ struct ExecuteByteCodeResult
 {
    1: general.APIResponse status
    2: binary contractState
-   3: optional string ret_val //general.Variant
+   3: optional general.Variant ret_val //general.Variant
 }
 
 struct GetterMethodResult {
    1: general.APIResponse status
-   2: optional string ret_val //general.Variant
+   2: optional general.Variant ret_val //general.Variant
 }
 
 struct ExecuteByteCodeMultipleResult {
@@ -37,7 +37,7 @@ struct GetContractMethodsResult {
 
 struct GetContractVariablesResult{
    1: general.APIResponse status
-   2: map<string, string> contractVariables //general.Variant
+   2: map<string, general.Variant> contractVariables //general.Variant
 }
 
 struct CompileByteCodeResult {
