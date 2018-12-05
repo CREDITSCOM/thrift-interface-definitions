@@ -12,6 +12,9 @@ typedef binary Address
 // Unix timestamp in milliseconds
 typedef i64 Time
 
+typedef string TokenCode
+typedef string TokenAmount
+
 struct Amount
 {
   1: required i32 integral = 0;
@@ -54,7 +57,7 @@ struct SmartContractInvocation
 {
   1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  2: list<general.Variant> params
+  2: list<string> params //general.Variant
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
   3: bool forgetNewState
   4: optional SmartContractDeploy smartContractDeploy
@@ -221,7 +224,7 @@ struct TransactionsGetResult
 struct TransactionFlowResult
 {
     1: general.APIResponse status
-    2: optional general.Variant smart_contract_result
+    2: optional string smart_contract_result //general.Variant
     3: i32 roundNum
 }
 
@@ -296,7 +299,7 @@ struct SmartMethodParamsGetResult
 {
     1: general.APIResponse status
     2: string method;
-    3: list<general.Variant> params;
+    3: list<string> params; //general.Variant
 
 }
 
@@ -356,7 +359,7 @@ struct SmartContractDataResult
 {
     1: general.APIResponse status;
     2: list<SmartContractMethod> methods;
-    3: map<string, general.Variant> variables
+    3: map<string, string> variables //general.Variant
 }
 
 struct SmartContractCompileResult
@@ -364,6 +367,52 @@ struct SmartContractCompileResult
     1: general.APIResponse status;
     2: binary byteCode;
     3: TokenStandart ts;
+}
+
+// Tokens
+struct TokenInfo
+{
+    1: Address address
+    2: TokenCode code
+    3: string name
+    4: TokenAmount totalSupply
+    5: Address owner
+    6: i32 transfersCount
+    7: i32 transactionsCount
+    8: i32 holdersCount
+    9: TokenStandart standart
+}
+
+struct TokenBalance
+{
+    1: Address token
+    2: TokenCode code
+    3: TokenAmount balance
+}
+
+struct TokenBalancesResult
+{
+    1: general.APIResponse status;
+    2: list<TokenBalance> balances;
+}
+
+struct TokenTransfer
+{
+    1: Address token
+    2: TokenCode code
+    3: Address sender   // This may be zeros if transfer() and not transferFrom() was called
+    4: Address receiver
+    5: TokenAmount amount
+    6: Address initiator
+    7: TransactionId transaction
+    8: Time time
+}
+
+struct TokenTransfersResult
+{
+    1: general.APIResponse status;
+    2: i32 count;
+    3: list<TokenTransfer> transfers;
 }
 ////////
 
@@ -415,5 +464,9 @@ service API
 	// Smart contracts
     SmartContractDataResult SmartContractDataGet(1:Address address)
     SmartContractCompileResult SmartContractCompile(1:string sourceCode)
+	
+	// Tokens
+    TokenBalancesResult TokenBalancesGet(1:Address address)
+	TokenTransfersResult TokenTransfersGet(1:Address token, 2:i64 offset, 3:i64 limit)
 	////////new
 }
