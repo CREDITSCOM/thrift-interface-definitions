@@ -40,9 +40,9 @@ struct GetContractVariablesResult{
    2: map<string, general.Variant> contractVariables //general.Variant
 }
 
-struct CompileByteCodeResult {
+struct CompileSourceCodeResult {
    1: general.APIResponse status
-   2: binary bytecode
+   2: binary byteCode
 }
 
 //struct ExecuteByteCodeResult
@@ -55,10 +55,10 @@ struct CompileByteCodeResult {
 
 service ContractExecutor {
 	//ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary byteCode, 3: binary contractState, 4:string method, 5:list<general.Variant> params)
-	//GetContractMethodsResult getContractMethods(1: binary bytecode)
-   ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary bytecode, 3:binary contractState, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime) //general.Variant+
-   ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:binary address, 2:binary bytecode, 3:binary contractState, 4:string method, 5:list<list<string>> params, 6:i64 executionTime)
-   GetContractMethodsResult getContractMethods(1:binary bytecode)
-   GetContractVariablesResult getContractVariables(1:binary bytecode, 2:binary contractState)
-   CompileByteCodeResult compileBytecode(1:string sourceCode)
+	//GetContractMethodsResult getContractMethods(1: binary byteCode)
+   ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary byteCode, 3:binary contractState, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime) //general.Variant+
+   ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:binary address, 2:binary byteCode, 3:binary contractState, 4:string method, 5:list<list<general.Variant>> params, 6:i64 executionTime)
+   GetContractMethodsResult getContractMethods(1:binary byteCode)
+   GetContractVariablesResult getContractVariables(1:binary byteCode, 2:binary contractState)
+   CompileSourceCodeResult compileSourceCode(1:string sourceCode)
 }
