@@ -49,14 +49,14 @@ struct CompileByteCodeResult {
 //{
 //  1: general.APIResponse status
 //	2: binary contractState
-//	3: optional string ret_val //general.Variant
-//	4: optional map<string, string> contractVariables //general.Variant
+//	3: optional general.Variant ret_val //general.Variant+
+//	4: optional map<string, general.Variant> contractVariables //general.Variant+
 //}
 
 service ContractExecutor {
 	//ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary byteCode, 3: binary contractState, 4:string method, 5:list<general.Variant> params)
 	//GetContractMethodsResult getContractMethods(1: binary bytecode)
-   ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary bytecode, 3:binary contractState, 4:string method, 5:list<string> params, 6:i64 executionTime) //general.Variant
+   ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary bytecode, 3:binary contractState, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime) //general.Variant+
    ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:binary address, 2:binary bytecode, 3:binary contractState, 4:string method, 5:list<list<string>> params, 6:i64 executionTime)
    GetContractMethodsResult getContractMethods(1:binary bytecode)
    GetContractVariablesResult getContractVariables(1:binary bytecode, 2:binary contractState)

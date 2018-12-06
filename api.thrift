@@ -57,7 +57,7 @@ struct SmartContractInvocation
 {
   1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  2: list<string> params //general.Variant
+  2: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
   3: bool forgetNewState
   4: optional SmartContractDeploy smartContractDeploy
@@ -300,8 +300,7 @@ struct SmartMethodParamsGetResult
 {
     1: general.APIResponse status
     2: string method;
-    3: list<string> params; //general.Variant
-
+    3: list<general.Variant> params; //general.Variant+
 }
 
 /*struct MethodDescription {
@@ -391,7 +390,7 @@ struct TokenTransaction
     3: Time time
     4: Address initiator
     5: string method
-    6: list<string> params
+    6: list<general.Variant> params //general.Variant+
 }
 
 struct TokenHolder
@@ -479,6 +478,36 @@ struct TokensListResult
     2: i32 count;
     3: list<TokenInfo> tokens;
 }
+
+// Wallets
+struct WalletInfo
+{
+    1: Address address;
+    2: Amount balance;
+    3: i64 transactionsNumber;
+    4: Time firstTransactionTime;
+}
+
+struct WalletsGetResult
+{
+    1: general.APIResponse status
+    2: i32 count
+    3: list<WalletInfo> wallets;
+}
+
+struct WriterInfo
+{
+    1: Address address;
+    2: i32 timesWriter;
+    3: Amount feeCollected;
+}
+
+struct WritersGetResult
+{
+    1: general.APIResponse status;
+    2: i32 pages;
+    3: list<WriterInfo> writers;
+}
 ////////
 
 service API
@@ -541,5 +570,9 @@ service API
 	TokenInfoResult TokenInfoGet(1:Address token)
 	TokenHoldersResult TokenHoldersGet(1:Address token, 2:i64 offset, 3:i64 limit, 4:TokenHoldersSortField order, 5:bool desc)
 	TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc)
+	
+	// Wallets
+	WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
+    WritersGetResult WritersGet(1:i32 page)
 	////////
 }
