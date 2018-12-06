@@ -94,8 +94,9 @@ struct Transaction
     7: binary signature
     8: optional SmartContractInvocation smartContract
     // Max fee acceptable for donor to be subtracted
-    9: AmountCommission fee
-	10: i64 timeCreation
+    //9: AmountCommission fee
+	9: Amount fee
+	10: Time timeCreation
 	// user fields
 	11: optional binary userFields
 }
@@ -124,6 +125,8 @@ struct Pool
     // Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
+	6: Address writer
+    7: Amount totalFee
 }
 
 //
@@ -235,7 +238,8 @@ struct PoolListGetResult
 {
     1: general.APIResponse status
     2: bool result
-    3: list<Pool> pools
+	3: i32 count
+    4: list<Pool> pools
 }
 
 // PoolInfoGet
@@ -286,7 +290,8 @@ struct SmartContractAddressesListGetResult
 struct SmartContractsListGetResult
 {
     1: general.APIResponse status
-    2: list<SmartContract> smartContractsList
+	2: i32 count
+    3: list<SmartContract> smartContractsList
 }
 
 struct TransactionsStateGetResult
