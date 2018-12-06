@@ -220,9 +220,9 @@ struct TransactionsGetResult
 {
     1: general.APIResponse status
     2: bool result
-    3: list<SealedTransaction> transactions
-	4: TrxnsCountFromAddr trxns_count
-	5: i64 total_trxns_count
+	3: i32 total_trxns_count
+    4: list<SealedTransaction> transactions
+	5: TrxnsCountFromAddr trxns_count
 }
 
 struct TransactionFlowResult
