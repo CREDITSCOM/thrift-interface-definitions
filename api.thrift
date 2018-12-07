@@ -51,6 +51,8 @@ struct SmartContract
   2: Address deployer
   3: SmartContractDeploy smartContractDeploy
   4: binary objectState
+  5: Time createTime
+  6: i32 transactionsCount
 } 
 
 struct SmartContractInvocation
