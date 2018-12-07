@@ -41,7 +41,7 @@ struct SmartContractDeploy
   1: string sourceCode
   2: binary byteCode
   3: string hashState
-  4: i16 tokenStandart	
+  4: TokenStandart tokenStandart	
 }
 
 // Smart contract info
