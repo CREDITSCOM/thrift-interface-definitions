@@ -96,8 +96,8 @@ struct Transaction
     7: binary signature
     8: optional SmartContractInvocation smartContract
     // Max fee acceptable for donor to be subtracted
-    //9: AmountCommission fee
-	9: Amount fee
+    9: AmountCommission fee
+	//9: Amount fee
 	10: Time timeCreation
 	// user fields
 	11: optional binary userFields
