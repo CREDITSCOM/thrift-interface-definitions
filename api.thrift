@@ -193,7 +193,7 @@ struct WalletBalanceGetResult
     2: Amount balance
 }
 
-enum TransactionState {
+enum TransactionState { 
     INVALID = 0,
     VALID,
     INPROGRESS
