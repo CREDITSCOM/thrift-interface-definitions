@@ -14,6 +14,17 @@ union Variant {
 	10: map<Variant, Variant> v_map;
 }
 
+struct MethodArgument {
+  1: string type
+  2: string name
+}
+
+struct MethodDescription {
+  1: string returnType
+  2: string name
+  3: list<MethodArgument> arguments
+}
+
 //
 // API responses
 //

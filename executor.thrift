@@ -2,17 +2,6 @@ include 'general.thrift'
 namespace java com.credits.client.executor.thrift.generated
 namespace cpp executor
 
-struct MethodArgument {
-  1: string type
-  2: string name
-}
-
-struct MethodDescription {
-  1: string returnType
-  2: string name
-  3: list<MethodArgument> arguments
-}
-
 struct ExecuteByteCodeResult
 {
    1: general.APIResponse status
@@ -32,7 +21,7 @@ struct ExecuteByteCodeMultipleResult {
 
 struct GetContractMethodsResult {
     1: general.APIResponse status
-    2: list<MethodDescription> methods
+    2: list<general.MethodDescription> methods
 }
 
 struct GetContractVariablesResult{

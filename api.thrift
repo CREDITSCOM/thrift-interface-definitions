@@ -96,8 +96,7 @@ struct Transaction
     7: binary signature
     8: optional SmartContractInvocation smartContract
     // Max fee acceptable for donor to be subtracted
-    //9: AmountCommission fee
-	9: Amount fee
+    9: AmountCommission fee
 	10: Time timeCreation
 	// user fields
 	11: optional binary userFields
@@ -310,27 +309,12 @@ struct SmartMethodParamsGetResult
     3: list<general.Variant> params; //general.Variant+
 }
 
-/*struct MethodDescription {
-    1: string name
-    2: list<string> argTypes
-    3: string returnType
-}*/
 
-struct MethodArgument {
-  1: string type
-  2: string name
-}
-
-struct MethodDescription {
-  1: string returnType
-  2: string name
-  3: list<MethodArgument> arguments
-}
 
 struct ContractAllMethodsGetResult {
     1: i8 code
     2: string message
-    3: list<MethodDescription> methods
+    3: list<general.MethodDescription> methods
 }
 
 struct MembersSmartContractGetResult {
