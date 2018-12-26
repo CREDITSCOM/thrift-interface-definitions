@@ -2,22 +2,42 @@ namespace java com.credits.general.thrift.generated
 namespace cpp general
 
 union Variant {
-	1: bool v_bool;
-	2: i8 v_i8;
-	3: i16 v_i16;
-	4: i32 v_i32;
-	5: i64 v_i64;
-	6: double v_double;
-	7: string v_string;
-	8: list<Variant> v_list;
-	9: set<Variant> v_set;
-	10: map<Variant, Variant> v_map;
+	1: i8 v_null;
+	2: bool v_boolean;
+	3: bool v_boolean_box;
+	4: i8 v_byte;
+	5: i8 v_byte_box;
+	6: i16 v_short;
+	7: i16 v_short_box;
+	8: i32 v_int;
+	9: i32 v_int_box;		
+	10: i64 v_long;
+	11: i64 v_long_box;
+	12: double v_float;
+	13: double v_float_box;
+	14: double v_double;
+	15: double v_double_box;
+	16: string v_string;
+	17: list<Variant> v_list;
+	18: set<Variant> v_set;
+	19: map<Variant, Variant> v_map;
+	20: list<Variant> v_array;
+}
+
+struct MethodArgument {
+  1: string type
+  2: string name
+}
+
+struct MethodDescription {
+  1: string returnType
+  2: string name
+  3: list<MethodArgument> arguments
 }
 
 //
 // API responses
 //
-
 struct APIResponse
 {
 	// 0 for success, 1 for failure, 2 for not being implemented (currently unused)

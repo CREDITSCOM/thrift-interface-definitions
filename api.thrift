@@ -12,6 +12,9 @@ typedef binary Address
 // Unix timestamp in milliseconds
 typedef i64 Time
 
+typedef string TokenCode
+typedef string TokenAmount
+
 struct Amount
 {
   1: required i32 integral = 0;
@@ -38,7 +41,7 @@ struct SmartContractDeploy
   1: string sourceCode
   2: binary byteCode
   3: string hashState
-  4: i16 tokenStandart	
+  4: TokenStandart tokenStandart	
 }
 
 // Smart contract info
@@ -48,13 +51,15 @@ struct SmartContract
   2: Address deployer
   3: SmartContractDeploy smartContractDeploy
   4: binary objectState
+  5: Time createTime
+  6: i32 transactionsCount
 } 
 
 struct SmartContractInvocation
 {
   1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  2: list<general.Variant> params
+  2: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
   3: bool forgetNewState
   4: optional SmartContractDeploy smartContractDeploy
@@ -92,9 +97,9 @@ struct Transaction
     8: optional SmartContractInvocation smartContract
     // Max fee acceptable for donor to be subtracted
     9: AmountCommission fee
-	10: i64 timeCreation
-	// comment
-	11: optional binary comment
+	10: Time timeCreation
+	// user fields
+	11: optional binary userFields
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
@@ -121,6 +126,8 @@ struct Pool
     // Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
+	6: Address writer
+    7: Amount totalFee
 }
 
 //
@@ -204,7 +211,7 @@ struct TransactionGetResult
 }
 
 // TransactionsGet
-struct TrxnsCount
+struct TrxnsCountFromAddr
 {
     1: i64 sendCount
 	2: i64 recvCount
@@ -214,14 +221,15 @@ struct TransactionsGetResult
 {
     1: general.APIResponse status
     2: bool result
-    3: list<SealedTransaction> transactions
-	4: TrxnsCount totalTrxns
+	3: i32 total_trxns_count
+    4: list<SealedTransaction> transactions
+	5: TrxnsCountFromAddr trxns_count
 }
 
 struct TransactionFlowResult
 {
     1: general.APIResponse status
-    2: optional general.Variant smart_contract_result
+    2: optional general.Variant smart_contract_result //general.Variant
     3: i32 roundNum
 }
 
@@ -231,7 +239,8 @@ struct PoolListGetResult
 {
     1: general.APIResponse status
     2: bool result
-    3: list<Pool> pools
+	3: i32 count
+    4: list<Pool> pools
 }
 
 // PoolInfoGet
@@ -282,7 +291,8 @@ struct SmartContractAddressesListGetResult
 struct SmartContractsListGetResult
 {
     1: general.APIResponse status
-    2: list<SmartContract> smartContractsList
+	2: i32 count
+    3: list<SmartContract> smartContractsList
 }
 
 struct TransactionsStateGetResult
@@ -296,20 +306,15 @@ struct SmartMethodParamsGetResult
 {
     1: general.APIResponse status
     2: string method;
-    3: list<general.Variant> params;
-
+    3: list<general.Variant> params; //general.Variant+
 }
 
-struct MethodDescription {
-    1: string name
-    2: list<string> argTypes
-    3: string returnType
-}
+
 
 struct ContractAllMethodsGetResult {
     1: i8 code
     2: string message
-    3: list<MethodDescription> methods
+    3: list<general.MethodDescription> methods
 }
 
 struct MembersSmartContractGetResult {
@@ -320,6 +325,181 @@ struct MembersSmartContractGetResult {
 	5: string totalCoins
     6: string symbol
 }
+
+////////
+enum TokenStandart
+{
+    NotAToken = 0,
+    CreditsBasic = 1,
+    CreditsExtended = 2
+}
+// Smart contracts
+
+struct SmartContractMethodArgument {
+    1: string type
+    2: string name
+}
+
+struct SmartContractMethod {
+    1: string returnType
+    2: string name
+    3: list<SmartContractMethodArgument> arguments
+}
+
+struct SmartContractDataResult
+{
+    1: general.APIResponse status;
+    2: list<SmartContractMethod> methods;
+    3: map<string, general.Variant> variables //general.Variant
+}
+
+struct SmartContractCompileResult
+{
+    1: general.APIResponse status;
+    2: binary byteCode;
+    3: TokenStandart ts;
+}
+
+// Tokens
+struct TokenInfo
+{
+    1: Address address
+    2: TokenCode code
+    3: string name
+    4: TokenAmount totalSupply
+    5: Address owner
+    6: i32 transfersCount
+    7: i32 transactionsCount
+    8: i32 holdersCount
+    9: TokenStandart standart
+}
+
+struct TokenTransaction
+{
+    1: Address token
+    2: TransactionId transaction
+    3: Time time
+    4: Address initiator
+    5: string method
+    6: list<general.Variant> params //general.Variant+
+}
+
+struct TokenHolder
+{
+    1: Address holder
+    2: Address token
+    3: TokenAmount balance
+    4: i32 transfersCount
+}
+
+// Token requests results
+
+enum TokensListSortField
+{
+    TL_Code,
+    TL_Name,
+    TL_Address,
+    TL_TotalSupply,
+    TL_HoldersCount,
+    TL_TransfersCount,
+    TL_TransactionsCount
+}
+
+enum TokenHoldersSortField
+{
+    TH_Balance,
+    TH_TransfersCount
+}
+
+struct TokenBalance
+{
+    1: Address token
+    2: TokenCode code
+    3: TokenAmount balance
+}
+
+struct TokenBalancesResult
+{
+    1: general.APIResponse status;
+    2: list<TokenBalance> balances;
+}
+
+struct TokenTransfer
+{
+    1: Address token
+    2: TokenCode code
+    3: Address sender   // This may be zeros if transfer() and not transferFrom() was called
+    4: Address receiver
+    5: TokenAmount amount
+    6: Address initiator
+    7: TransactionId transaction
+    8: Time time
+}
+
+struct TokenTransfersResult
+{
+    1: general.APIResponse status;
+    2: i32 count;
+    3: list<TokenTransfer> transfers;
+}
+
+struct TokenTransactionsResult
+{
+    1: general.APIResponse status;
+    2: i32 count;
+    3: list<TokenTransaction> transactions;
+}
+
+struct TokenInfoResult
+{
+    1: general.APIResponse status;
+    2: TokenInfo token;
+}
+
+struct TokenHoldersResult
+{
+    1: general.APIResponse status;
+    2: i32 count;
+    3: list<TokenHolder> holders;
+}
+
+struct TokensListResult
+{
+    1: general.APIResponse status;
+    2: i32 count;
+    3: list<TokenInfo> tokens;
+}
+
+// Wallets
+struct WalletInfo
+{
+    1: Address address;
+    2: Amount balance;
+    3: i64 transactionsNumber;
+    4: Time firstTransactionTime;
+}
+
+struct WalletsGetResult
+{
+    1: general.APIResponse status
+    2: i32 count
+    3: list<WalletInfo> wallets;
+}
+
+struct WriterInfo
+{
+    1: Address address;
+    2: i32 timesWriter;
+    3: Amount feeCollected;
+}
+
+struct WritersGetResult
+{
+    1: general.APIResponse status;
+    2: i32 pages;
+    3: list<WriterInfo> writers;
+}
+////////
 
 service API
 {
@@ -333,6 +513,7 @@ service API
     TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit) 
     // Not for monitor. Transmit transaction to network for approval
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
+	TransactionsGetResult TransactionsListGet(1:i64 offset, 2:i64 limit)
 
     // For tetris for now.
     PoolHash GetLastHash()
@@ -364,4 +545,25 @@ service API
     ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:TransactionInnerId id)
 	MembersSmartContractGetResult MembersSmartContractGet(1:TransactionId transactionId)
+	
+	////////
+	// Smart contracts
+    SmartContractDataResult SmartContractDataGet(1:Address address)
+    SmartContractCompileResult SmartContractCompile(1:string sourceCode)
+	
+	// Tokens
+    TokenBalancesResult TokenBalancesGet(1:Address address)
+	TokenTransfersResult TokenTransfersGet(1:Address token, 2:i64 offset, 3:i64 limit)
+	TokenTransfersResult TokenTransfersListGet(1:i64 offset, 2:i64 limit)
+	TokenTransfersResult TokenWalletTransfersGet(1:Address token, 2:Address address, 3:i64 offset, 4:i64 limit)
+	
+	TokenTransactionsResult TokenTransactionsGet(1:Address token, 2:i64 offset, 3:i64 limit)
+	TokenInfoResult TokenInfoGet(1:Address token)
+	TokenHoldersResult TokenHoldersGet(1:Address token, 2:i64 offset, 3:i64 limit, 4:TokenHoldersSortField order, 5:bool desc)
+	TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc)
+	
+	// Wallets
+	WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
+    WritersGetResult WritersGet(1:i32 page)
+	////////
 }
