@@ -35,6 +35,11 @@ struct MethodDescription {
   3: list<MethodArgument> arguments
 }
 
+struct ByteCodeObject {
+  1: string name
+  2: binary byteCode
+}
+
 //
 // API responses
 //

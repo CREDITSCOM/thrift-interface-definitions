@@ -31,7 +31,7 @@ struct GetContractVariablesResult{
 
 struct CompileSourceCodeResult {
    1: general.APIResponse status
-   2: binary byteCode
+   2: list<general.ByteCodeObject> byteCodeObjects
 }
 
 //struct ExecuteByteCodeResult
@@ -43,11 +43,11 @@ struct CompileSourceCodeResult {
 //}
 
 service ContractExecutor {
-	//ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary byteCode, 3: binary contractState, 4:string method, 5:list<general.Variant> params)
-	//GetContractMethodsResult getContractMethods(1: binary byteCode)
-   ExecuteByteCodeResult executeByteCode(1:binary address, 2:binary byteCode, 3:binary contractState, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime) //general.Variant+
-   ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:binary address, 2:binary byteCode, 3:binary contractState, 4:string method, 5:list<list<general.Variant>> params, 6:i64 executionTime)
-   GetContractMethodsResult getContractMethods(1:binary byteCode)
-   GetContractVariablesResult getContractVariables(1:binary byteCode, 2:binary contractState)
+	//ExecuteByteCodeResult executeByteCode(1:binary address, 2:list<general.ByteCodeObject> byteCodeObjects, 3: binary contractState, 4:string method, 5:list<general.Variant> params)
+	//GetContractMethodsResult getContractMethods(1: list<general.ByteCodeObject> byteCodeObjects)
+   ExecuteByteCodeResult executeByteCode(1:binary address, 2:list<general.ByteCodeObject> byteCodeObjects, 3:binary contractState, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime) //general.Variant+
+   ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:binary address, 2:list<general.ByteCodeObject> byteCodeObjects, 3:binary contractState, 4:string method, 5:list<list<general.Variant>> params, 6:i64 executionTime)
+   GetContractMethodsResult getContractMethods(1:list<general.ByteCodeObject> byteCodeObjects)
+   GetContractVariablesResult getContractVariables(1:list<general.ByteCodeObject> byteCodeObjects, 2:binary contractState)
    CompileSourceCodeResult compileSourceCode(1:string sourceCode)
 }
