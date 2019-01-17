@@ -501,6 +501,13 @@ struct WritersGetResult
 }
 ////////
 
+struct SyncStateResult
+{
+    1: general.APIResponse status;
+	2: i64 currRound;
+	3: i64 lastBlock
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:Address address)
@@ -566,4 +573,6 @@ service API
 	WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
     WritersGetResult WritersGet(1:i32 page)
 	////////
+	
+	SyncStateResult SyncStateGet()
 }
