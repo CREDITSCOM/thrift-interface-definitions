@@ -577,6 +577,7 @@ service API
 	// Tokens
     TokenBalancesResult TokenBalancesGet(1:Address address)
 	TokenTransfersResult TokenTransfersGet(1:Address token, 2:i64 offset, 3:i64 limit)
+	TokenTransfersResult TokenTransferGet(1:Address token, 2:TransactionId id)
 	TokenTransfersResult TokenTransfersListGet(1:i64 offset, 2:i64 limit)
 	TokenTransfersResult TokenWalletTransfersGet(1:Address token, 2:Address address, 3:i64 offset, 4:i64 limit)
 	
