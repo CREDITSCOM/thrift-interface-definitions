@@ -415,7 +415,8 @@ struct TokenBalance
 {
     1: Address token
     2: TokenCode code
-    3: TokenAmount balance
+	3: string name
+    4: TokenAmount balance
 }
 
 struct TokenBalancesResult
@@ -501,6 +502,21 @@ struct WritersGetResult
 }
 ////////
 
+struct TrustedInfo
+{
+    1: Address address;
+    2: i32 timesWriter;   
+	3: i32 timesTrusted
+	4: Amount feeCollected;
+}
+
+struct TrustedGetResult
+{
+    1: general.APIResponse status;
+    2: i32 pages;
+    3: list<TrustedInfo> writers;
+}
+
 struct SyncStateResult
 {
     1: general.APIResponse status;
@@ -571,7 +587,7 @@ service API
 	
 	// Wallets
 	WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
-    WritersGetResult WritersGet(1:i32 page)
+    TrustedGetResult TrustedGet(1:i32 page)
 	////////
 	
 	SyncStateResult SyncStateGet()
