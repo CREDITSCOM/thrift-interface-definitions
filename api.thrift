@@ -39,7 +39,7 @@ typedef map<Currency, CumulativeAmount> Total;
 struct SmartContractDeploy
 {
   1: string sourceCode
-  2: binary byteCode
+  2: list<general.ByteCodeObject> byteCodeObjects
   3: string hashState
   4: TokenStandart tokenStandart	
 }
@@ -193,7 +193,7 @@ struct WalletBalanceGetResult
     2: Amount balance
 }
 
-enum TransactionState { 
+enum TransactionState {
     INVALID = 0,
     VALID,
     INPROGRESS
@@ -317,15 +317,6 @@ struct ContractAllMethodsGetResult {
     3: list<general.MethodDescription> methods
 }
 
-struct MembersSmartContractGetResult {
-    1: general.APIResponse status
-    2: string name
-    3: string owner
-	4: string decimal
-	5: string totalCoins
-    6: string symbol
-}
-
 ////////
 enum TokenStandart
 {
@@ -356,7 +347,7 @@ struct SmartContractDataResult
 struct SmartContractCompileResult
 {
     1: general.APIResponse status;
-    2: binary byteCode;
+    2: list<general.ByteCodeObject> byteCodeObjects;
     3: TokenStandart ts;
 }
 
@@ -487,21 +478,6 @@ struct WalletsGetResult
     3: list<WalletInfo> wallets;
 }
 
-struct WriterInfo
-{
-    1: Address address;
-    2: i32 timesWriter;
-    3: Amount feeCollected;
-}
-
-struct WritersGetResult
-{
-    1: general.APIResponse status;
-    2: i32 pages;
-    3: list<WriterInfo> writers;
-}
-////////
-
 struct TrustedInfo
 {
     1: Address address;
@@ -516,6 +492,7 @@ struct TrustedGetResult
     2: i32 pages;
     3: list<TrustedInfo> writers;
 }
+////////
 
 struct SyncStateResult
 {
@@ -565,9 +542,8 @@ service API
     TransactionId WaitForSmartTransaction(1:Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
-    ContractAllMethodsGetResult ContractAllMethodsGet(1: binary bytecode)
+    ContractAllMethodsGetResult ContractAllMethodsGet(1: list<general.ByteCodeObject> byteCodeObjects)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:TransactionInnerId id)
-	MembersSmartContractGetResult MembersSmartContractGet(1:TransactionId transactionId)
 	
 	////////
 	// Smart contracts
