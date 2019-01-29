@@ -210,20 +210,12 @@ struct TransactionGetResult
     5: SealedTransaction transaction
 }
 
-// TransactionsGet
-struct TrxnsCountFromAddr
-{
-    1: i64 sendCount
-	2: i64 recvCount
-}
-
 struct TransactionsGetResult
 {
     1: general.APIResponse status
     2: bool result
 	3: i32 total_trxns_count
     4: list<SealedTransaction> transactions
-	5: TrxnsCountFromAddr trxns_count
 }
 
 struct TransactionFlowResult
