@@ -1,6 +1,9 @@
 namespace java com.credits.general.thrift.generated
 namespace cpp general
 
+typedef i64 AccessID
+typedef binary Address
+
 union Variant {
 	1: i8 v_null;
 	2: bool v_boolean;
@@ -45,8 +48,6 @@ struct ByteCodeObject {
 //
 struct APIResponse
 {
-	// 0 for success, 1 for failure, 2 for not being implemented (currently unused)
-    1: i8 code
-	// Explanation
-    2: string message
+    1: i8 code // 0 for success, 1 for failure, 2 for not being implemented (currently unused)
+    2: string message // Explanation
 }
