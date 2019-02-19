@@ -1,4 +1,5 @@
 include 'general.thrift'
+include 'api.thrift'
 namespace cpp apiexec
 
 struct GetSeedResult
@@ -14,7 +15,13 @@ struct GetSmartCodeResult
 	3: binary contractState
 }
 
+struct SendTransactionResult
+{
+	1: general.APIResponse status
+}
+
 service APIEXEC{
 	GetSeedResult GetSeed(1:general.AccessID accessId)
 	GetSmartCodeResult GetSmartCode(1:general.AccessID accessId, 2:general.Address address)
+	SendTransactionResult SendTransaction(1:api.Transaction transaction)
 }
