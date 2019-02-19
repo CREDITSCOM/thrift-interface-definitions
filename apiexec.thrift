@@ -1,5 +1,6 @@
 include 'general.thrift'
 include 'api.thrift'
+namespace java com.credits.client.executor.thrift.generated.apiexec
 namespace cpp apiexec
 
 struct GetSeedResult
