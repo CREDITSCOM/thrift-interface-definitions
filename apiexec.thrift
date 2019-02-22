@@ -34,5 +34,5 @@ service APIEXEC{
 	GetSmartCodeResult GetSmartCode(1:general.AccessID accessId, 2:general.Address address)
 	SendTransactionResult SendTransaction(1:api.Transaction transaction)
 	api.WalletIdGetResult WalletIdGet(1:general.Address address)
-	SmartContractGetResult SmartContractGet(1:general.Address address)
+	SmartContractGetResult SmartContractGet(1:general.AccessID accessId, 2:general.Address address)
 }
