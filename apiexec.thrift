@@ -23,9 +23,10 @@ struct SendTransactionResult
 
 struct SmartContractGetResult
 {
-	1: list<general.ByteCodeObject> byteCodeObjects
-	2: binary contractState
-	3: bool stateCanModify
+	1: general.APIResponse status
+	2: list<general.ByteCodeObject> byteCodeObjects
+	3: binary contractState
+	4: bool stateCanModify
 }
 
 service APIEXEC{
