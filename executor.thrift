@@ -5,8 +5,9 @@ namespace cpp executor
 struct ExecuteByteCodeResult
 {
    1: general.APIResponse status
-   2: binary contractState
-   3: optional general.Variant ret_val //general.Variant
+   2: binary invokedContractState
+   3: list<binary> externalContractsState
+   4: optional general.Variant ret_val //general.Variant
 }
 
 struct GetterMethodResult {
