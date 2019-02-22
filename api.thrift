@@ -61,7 +61,7 @@ struct SmartContractInvocation
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
   2: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  3: list<string> usedContracts
+  3: list<general.Address> usedContracts
   4: bool forgetNewState
   5: optional SmartContractDeploy smartContractDeploy
 }
