@@ -6,7 +6,7 @@ struct ExecuteByteCodeResult
 {
    1: general.APIResponse status
    2: binary invokedContractState
-   3: list<binary> externalContractsState
+   3: map<general.Address, binary> externalContractsState
    4: optional general.Variant ret_val //general.Variant
 }
 
