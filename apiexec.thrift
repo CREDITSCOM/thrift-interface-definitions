@@ -24,7 +24,7 @@ struct SmartContractGetResult
 
 service APIEXEC{
 	GetSeedResult GetSeed(1:general.AccessID accessId)
-	SendTransactionResult SendTransaction(1:api.Transaction transaction)
-	api.WalletIdGetResult WalletIdGet(1:general.Address address)
+	SendTransactionResult SendTransaction(1:general.AccessID accessId, 2:api.Transaction transaction)
+	api.WalletIdGetResult WalletIdGet(1:general.AccessID accessId, 2:general.Address address)
 	SmartContractGetResult SmartContractGet(1:general.AccessID accessId, 2:general.Address address)
 }
