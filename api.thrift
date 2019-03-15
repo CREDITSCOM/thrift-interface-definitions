@@ -8,7 +8,7 @@ namespace cpp api
 // Currency code, 1 for mainline one (Credits, 'CS')
 typedef i8 Currency
 // Wallet or smart contract address
-typedef binary Address
+//typedef binary Address
 // Unix timestamp in milliseconds
 typedef i64 Time
 
@@ -47,8 +47,8 @@ struct SmartContractDeploy
 // Smart contract info
 struct SmartContract
 {
-  1: required Address address
-  2: Address deployer
+  1: required general.Address address
+  2: general.Address deployer
   3: SmartContractDeploy smartContractDeploy
   4: binary objectState
   5: Time createTime
@@ -61,8 +61,9 @@ struct SmartContractInvocation
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
   2: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  3: bool forgetNewState
-  4: optional SmartContractDeploy smartContractDeploy
+  3: list<general.Address> usedContracts
+  4: bool forgetNewState
+  5: optional SmartContractDeploy smartContractDeploy
 }
 //
 // Transactions
@@ -104,8 +105,8 @@ struct TokenDeployTransInfo
 struct TokenTransferTransInfo
 {
     1: TokenCode code
-    2: Address sender
-    3: Address receiver
+    2: general.Address sender
+    3: general.Address receiver
     4: TokenAmount amount
     5: SmartOperationState state
     6: optional TransactionId stateTransaction
@@ -148,9 +149,9 @@ struct Transaction
     1: TransactionInnerId id
     // Giver if no smart contract invokation is present, otherwise deployer.
     // Generally, public key against of which signature is validated
-    2: Address source
+    2: general.Address source
     // Smart contract address if one's invokation is present, otherwise acceptor's address
-    3: Address target
+    3: general.Address target
     // Transfer amount for payment transaction
     4: Amount amount
     // Wallet's view on it's balance
@@ -193,7 +194,7 @@ struct Pool
     // Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
-    6: Address writer
+    6: general.Address writer
     7: Amount totalFee
 }
 
@@ -342,7 +343,7 @@ struct SmartContractGetResult
 struct SmartContractAddressesListGetResult
 {
     1: general.APIResponse status
-    2: list<Address> addressesList
+    2: list<general.Address> addressesList
 }
 
 // SmartContractsListGetResult
@@ -413,11 +414,11 @@ struct SmartContractCompileResult
 // Tokens
 struct TokenInfo
 {
-    1: Address address
+    1: general.Address address
     2: TokenCode code
     3: string name
     4: TokenAmount totalSupply
-    5: Address owner
+    5: general.Address owner
     6: i32 transfersCount
     7: i32 transactionsCount
     8: i32 holdersCount
@@ -426,18 +427,18 @@ struct TokenInfo
 
 struct TokenTransaction
 {
-    1: Address token
+    1: general.Address token
     2: TransactionId transaction
     3: Time time
-    4: Address initiator
+    4: general.Address initiator
     5: string method
     6: list<general.Variant> params //general.Variant+
 }
 
 struct TokenHolder
 {
-    1: Address holder
-    2: Address token
+    1: general.Address holder
+    2: general.Address token
     3: TokenAmount balance
     4: i32 transfersCount
 }
@@ -463,7 +464,7 @@ enum TokenHoldersSortField
 
 struct TokenBalance
 {
-    1: Address token
+    1: general.Address token
     2: TokenCode code
     3: string name
     4: TokenAmount balance
@@ -477,12 +478,12 @@ struct TokenBalancesResult
 
 struct TokenTransfer
 {
-    1: Address token
+    1: general.Address token
     2: TokenCode code
-    3: Address sender   // This may be zeros if transfer() and not transferFrom() was called
-    4: Address receiver
+    3: general.Address sender   // This may be zeros if transfer() and not transferFrom() was called
+    4: general.Address receiver
     5: TokenAmount amount
-    6: Address initiator
+    6: general.Address initiator
     7: TransactionId transaction
     8: Time time
 }
@@ -524,7 +525,7 @@ struct TokensListResult
 // Wallets
 struct WalletInfo
 {
-    1: Address address;
+    1: general.Address address;
     2: Amount balance;
     3: i64 transactionsNumber;
     4: Time firstTransactionTime;
@@ -539,7 +540,7 @@ struct WalletsGetResult
 
 struct TrustedInfo
 {
-    1: Address address;
+    1: general.Address address;
     2: i32 timesWriter;
     3: i32 timesTrusted
     4: Amount feeCollected;
@@ -562,14 +563,14 @@ struct SyncStateResult
 
 service API
 {
-    WalletDataGetResult WalletDataGet(1:Address address)
-    WalletIdGetResult WalletIdGet(1:Address address)
-    WalletTransactionsCountGetResult WalletTransactionsCountGet(1:Address address)
-    WalletBalanceGetResult WalletBalanceGet(1:Address address)
+    WalletDataGetResult WalletDataGet(1:general.Address address)
+    WalletIdGetResult WalletIdGet(1:general.Address address)
+    WalletTransactionsCountGetResult WalletTransactionsCountGet(1:general.Address address)
+    WalletBalanceGetResult WalletBalanceGet(1:general.Address address)
 
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
     // Get transactions where `address` is either sender or receiver
-    TransactionsGetResult TransactionsGet(1:Address address, 2:i64 offset, 3:i64 limit)
+    TransactionsGetResult TransactionsGet(1:general.Address address, 2:i64 offset, 3:i64 limit)
     // Not for monitor. Transmit transaction to network for approval
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
     TransactionsGetResult TransactionsListGet(1:i64 offset, 2:i64 limit)
@@ -589,36 +590,36 @@ service API
     // For web monitor.
     StatsGetResult StatsGet()
 
-    SmartContractGetResult SmartContractGet(1:Address address)
-    SmartContractsListGetResult SmartContractsListGet(1:Address deployer)
-    SmartContractAddressesListGetResult SmartContractAddressesListGet(1:Address deployer)
+    SmartContractGetResult SmartContractGet(1:general.Address address)
+    SmartContractsListGetResult SmartContractsListGet(1:general.Address deployer)
+    SmartContractAddressesListGetResult SmartContractAddressesListGet(1:general.Address deployer)
 
     // Blocks till `obsolete` is not the last block in chain.
     PoolHash WaitForBlock(1:PoolHash obsolete)
 
     // Blocks till there are transactions arrived to `smart_address`
     // not yet reported by this method in current node's process lifetime.
-    TransactionId WaitForSmartTransaction(1:Address smart_public)
+    TransactionId WaitForSmartTransaction(1:general.Address smart_public)
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
-    TransactionsStateGetResult TransactionsStateGet(1:Address address, 2:list<TransactionInnerId> id)
+    TransactionsStateGetResult TransactionsStateGet(1:general.Address address, 2:list<TransactionInnerId> id)
     ContractAllMethodsGetResult ContractAllMethodsGet(1: list<general.ByteCodeObject> byteCodeObjects)
-    SmartMethodParamsGetResult SmartMethodParamsGet(1:Address address, 2:TransactionInnerId id)
+    SmartMethodParamsGetResult SmartMethodParamsGet(1:general.Address address, 2:TransactionInnerId id)
 
     ////////
     // Smart contracts
-    SmartContractDataResult SmartContractDataGet(1:Address address)
+    SmartContractDataResult SmartContractDataGet(1:general.Address address)
     SmartContractCompileResult SmartContractCompile(1:string sourceCode)
 
     // Tokens
-    TokenBalancesResult TokenBalancesGet(1:Address address)
-    TokenTransfersResult TokenTransfersGet(1:Address token, 2:i64 offset, 3:i64 limit)
-    TokenTransfersResult TokenTransferGet(1:Address token, 2:TransactionId id)
+    TokenBalancesResult TokenBalancesGet(1:general.Address address)
+    TokenTransfersResult TokenTransfersGet(1:general.Address token, 2:i64 offset, 3:i64 limit)
+    TokenTransfersResult TokenTransferGet(1:general.Address token, 2:TransactionId id)
     TokenTransfersResult TokenTransfersListGet(1:i64 offset, 2:i64 limit)
-    TokenTransfersResult TokenWalletTransfersGet(1:Address token, 2:Address address, 3:i64 offset, 4:i64 limit)
+    TokenTransfersResult TokenWalletTransfersGet(1:general.Address token, 2:general.Address address, 3:i64 offset, 4:i64 limit)
 
-    TokenTransactionsResult TokenTransactionsGet(1:Address token, 2:i64 offset, 3:i64 limit)
-    TokenInfoResult TokenInfoGet(1:Address token)
-    TokenHoldersResult TokenHoldersGet(1:Address token, 2:i64 offset, 3:i64 limit, 4:TokenHoldersSortField order, 5:bool desc)
+    TokenTransactionsResult TokenTransactionsGet(1:general.Address token, 2:i64 offset, 3:i64 limit)
+    TokenInfoResult TokenInfoGet(1:general.Address token)
+    TokenHoldersResult TokenHoldersGet(1:general.Address token, 2:i64 offset, 3:i64 limit, 4:TokenHoldersSortField order, 5:bool desc)
     TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc)
 
     // Wallets

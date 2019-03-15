@@ -1,6 +1,9 @@
 namespace java com.credits.general.thrift.generated
 namespace cpp general
 
+typedef i64 AccessID
+typedef binary Address
+
 union Variant {
 	1: i8 v_null;
 	2: bool v_boolean;
@@ -24,15 +27,22 @@ union Variant {
 	20: list<Variant> v_array;
 }
 
+struct Annotation {
+	1:string name
+	2:map<string, string> arguments
+}
+
 struct MethodArgument {
   1: string type
   2: string name
+  3: list<Annotation> annotations
 }
 
 struct MethodDescription {
   1: string returnType
   2: string name
   3: list<MethodArgument> arguments
+  4: list<Annotation> annotations
 }
 
 struct ByteCodeObject {
@@ -45,8 +55,6 @@ struct ByteCodeObject {
 //
 struct APIResponse
 {
-	// 0 for success, 1 for failure, 2 for not being implemented (currently unused)
-    1: i8 code
-	// Explanation
-    2: string message
+    1: i8 code // 0 for success, 1 for failure, 2 for not being implemented (currently unused)
+    2: string message // Explanation
 }
