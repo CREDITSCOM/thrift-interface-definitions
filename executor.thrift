@@ -37,9 +37,8 @@ struct CompileSourceCodeResult {
 
 struct SmartContractBinary {
    1: general.Address contractAddress
-   2: list<general.ByteCodeObject> byteCodeObjects
-   3: binary contractState
-   4: bool stateCanModify
+   2: general.ClassObject object
+   3: bool stateCanModify
 }
 
 service ContractExecutor {

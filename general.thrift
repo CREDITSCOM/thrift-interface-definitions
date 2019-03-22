@@ -4,6 +4,11 @@ namespace cpp general
 typedef i64 AccessID
 typedef binary Address
 
+struct ClassObject {
+   1: list<ByteCodeObject> byteCodeObjects
+   2: binary instance
+}
+
 union Variant {
 	1: i8 v_null;
 	2: bool v_boolean;
@@ -25,6 +30,8 @@ union Variant {
 	18: set<Variant> v_set;
 	19: map<Variant, Variant> v_map;
 	20: list<Variant> v_array;
+	21: ClassObject v_object;
+	22: i8 v_void;
 }
 
 struct Annotation {
