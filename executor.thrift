@@ -44,9 +44,9 @@ struct SmartContractBinary {
 service ContractExecutor {
    //ExecuteByteCodeResult executeByteCode(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:general.Address contractAddress, 4:list<general.ByteCodeObject> byteCodeObjects, 5:binary contractState, 6:string method, 7:list<general.Variant> params, 8:i64 executionTime) //general.Variant+
    //ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:general.Address initiatorAddress, 2:general.Address contractAddress, 3:list<general.ByteCodeObject> byteCodeObjects, 4:binary contractState, 5:string method, 6:list<list<general.Variant>> params, 7:i64 executionTime)
-   ExecuteByteCodeResult executeByteCode(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime, 7:byte version) //general.Variant+
-   ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:string method, 5:list<list<general.Variant>> params, 6:i64 executionTime, 7:byte version)
-   GetContractMethodsResult getContractMethods(1:list<general.ByteCodeObject> byteCodeObjects, 2:byte version)
-   GetContractVariablesResult getContractVariables(1:list<general.ByteCodeObject> byteCodeObjects, 2:binary contractState, 3:byte version)
-   CompileSourceCodeResult compileSourceCode(1:string sourceCode, 2:byte version)
+   ExecuteByteCodeResult executeByteCode(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:string method, 5:list<general.Variant> params, 6:i64 executionTime, 7:i16 version) //general.Variant+
+   ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:string method, 5:list<list<general.Variant>> params, 6:i64 executionTime, 7:i16 version)
+   GetContractMethodsResult getContractMethods(1:list<general.ByteCodeObject> byteCodeObjects, 2:i16 version)
+   GetContractVariablesResult getContractVariables(1:list<general.ByteCodeObject> byteCodeObjects, 2:binary contractState, 3:i16 version)
+   CompileSourceCodeResult compileSourceCode(1:string sourceCode, 2:i16 version)
 }

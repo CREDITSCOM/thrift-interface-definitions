@@ -9,29 +9,34 @@ struct ClassObject {
    2: binary instance
 }
 
+struct object {
+	1: string nameClass
+	2: binary instance
+}
+
 union Variant {
-	1: i8 v_null;
-	2: bool v_boolean;
-	3: bool v_boolean_box;
-	4: i8 v_byte;
-	5: i8 v_byte_box;
-	6: i16 v_short;
-	7: i16 v_short_box;
-	8: i32 v_int;
-	9: i32 v_int_box;		
-	10: i64 v_long;
-	11: i64 v_long_box;
-	12: double v_float;
-	13: double v_float_box;
-	14: double v_double;
-	15: double v_double_box;
-	16: string v_string;
-	17: list<Variant> v_list;
-	18: set<Variant> v_set;
-	19: map<Variant, Variant> v_map;
-	20: list<Variant> v_array;
-	21: ClassObject v_object;
-	22: i8 v_void;
+	1: string v_null;
+	2: i8 v_void;
+	3: bool v_boolean;
+	4: bool v_boolean_box;
+	5: i8 v_byte;
+	6: i8 v_byte_box;
+	7: i16 v_short;
+	8: i16 v_short_box;
+	9: i32 v_int;
+	10: i32 v_int_box;		
+	11: i64 v_long;
+	12: i64 v_long_box;
+	13: double v_float;
+	14: double v_float_box;
+	15: double v_double;
+	16: double v_double_box;
+	17: string v_string;
+	18: object v_object;
+	19: list<Variant> v_array;
+	20: list<Variant> v_list;
+	21: set<Variant> v_set;
+	22: map<Variant, Variant> v_map;
 }
 
 struct Annotation {
