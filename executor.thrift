@@ -46,9 +46,14 @@ struct SmartContractBinary {
    3: bool stateCanModify
 }
 
+struct MethodHeader{
+   1: string methodName
+   2: list<general.Variant> params 
+}
+
 
 service ContractExecutor {
-   ExecuteByteCodeResult executeByteCode(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:list<string> method, 5:list<list<general.Variant>> params, 6:i64 executionTime, 7:i16 version)
+   ExecuteByteCodeResult executeByteCode(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:list<MethodHeader> methods, 5:i64 executionTime, 6:i16 version)
    ExecuteByteCodeMultipleResult executeByteCodeMultiple(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:string method, 5:list<list<general.Variant>> params, 6:i64 executionTime, 7:i16 version)
    GetContractMethodsResult getContractMethods(1:list<general.ByteCodeObject> byteCodeObjects, 2:i16 version)
    GetContractVariablesResult getContractVariables(1:list<general.ByteCodeObject> byteCodeObjects, 2:binary contractState, 3:i16 version)
