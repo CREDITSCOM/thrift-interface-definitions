@@ -14,6 +14,12 @@ struct object {
 	2: binary instance
 }
 
+struct Amount
+{
+  1: required i32 integral = 0;
+  2: required i64 fraction = 0;
+}
+
 union Variant {
 	1: string v_null;
 	2: i8 v_void;
@@ -37,6 +43,7 @@ union Variant {
 	20: list<Variant> v_list;
 	21: set<Variant> v_set;
 	22: map<Variant, Variant> v_map;
+	23: Amount v_big_decimal;
 }
 
 struct Annotation {

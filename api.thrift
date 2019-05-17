@@ -15,12 +15,6 @@ typedef i64 Time
 typedef string TokenCode
 typedef string TokenAmount
 
-struct Amount
-{
-  1: required i32 integral = 0;
-  2: required i64 fraction = 0;
-}
-
 struct AmountCommission
 {
   1: required i16 commission = 0;
@@ -130,7 +124,7 @@ struct SmartExecutionTransInfo
 struct SmartStateTransInfo
 {
     1: bool success
-    2: Amount executionFee
+    2: general.Amount executionFee
     3: optional general.Variant returnValue
     4: TransactionId startTransaction
 }
@@ -153,9 +147,9 @@ struct Transaction
     // Smart contract address if one's invokation is present, otherwise acceptor's address
     3: general.Address target
     // Transfer amount for payment transaction
-    4: Amount amount
+    4: general.Amount amount
     // Wallet's view on it's balance
-    5: Amount balance
+    5: general.Amount balance
     6: Currency currency
     // Signature is formed against node's custom binary serialization format,
     // see other docs for description
@@ -191,11 +185,11 @@ struct Pool
     2: PoolHash prevHash
     // Timestamp from writer (?)
     3: Time time
-    // Amount of transactions in this block
+    // general.Amount of transactions in this block
     4: i32 transactionsCount
     5: PoolNumber poolNumber
     6: general.Address writer
-    7: Amount totalFee
+    7: general.Amount totalFee
 }
 
 //
@@ -207,7 +201,7 @@ typedef i32 WalletId
 struct WalletData
 {
     1: WalletId walletId
-    2: Amount balance
+    2: general.Amount balance
     3: TransactionInnerId lastTransactionId
 }
 
@@ -221,7 +215,7 @@ struct PeriodStats
 {
     // Amount of milliseconds over which following aggregated results are reported
     1: Time periodDuration
-    // Amount of pools
+    // general.Amount of pools
     2: Count poolsCount
     // Amount of transactionss
     3: Count transactionsCount
@@ -258,7 +252,7 @@ struct WalletTransactionsCountGetResult
 struct WalletBalanceGetResult
 {
     1: general.APIResponse status
-    2: Amount balance
+    2: general.Amount balance
 }
 
 enum TransactionState {
@@ -526,7 +520,7 @@ struct TokensListResult
 struct WalletInfo
 {
     1: general.Address address;
-    2: Amount balance;
+    2: general.Amount balance;
     3: i64 transactionsNumber;
     4: Time firstTransactionTime;
 }
@@ -543,7 +537,7 @@ struct TrustedInfo
     1: general.Address address;
     2: i32 timesWriter;
     3: i32 timesTrusted
-    4: Amount feeCollected;
+    4: general.Amount feeCollected;
 }
 
 struct TrustedGetResult
