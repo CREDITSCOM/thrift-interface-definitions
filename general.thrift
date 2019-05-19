@@ -43,7 +43,8 @@ union Variant {
 	20: list<Variant> v_list;
 	21: set<Variant> v_set;
 	22: map<Variant, Variant> v_map;
-	23: Amount v_big_decimal;
+	23: string v_big_decimal;
+	24: Amount v_amount;
 }
 
 struct Annotation {
