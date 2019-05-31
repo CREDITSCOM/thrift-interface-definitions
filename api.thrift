@@ -26,7 +26,7 @@ struct CumulativeAmount
   2: required i64 fraction = 0;
 }
 
-typedef map<Currency, Amount> Balance;
+typedef map<Currency, general.Amount> Balance;
 
 typedef map<Currency, CumulativeAmount> Total;
 
