@@ -555,6 +555,12 @@ struct SyncStateResult
     3: i64 lastBlock
 }
 
+struct ExecuteCountGetResult
+{
+    1: general.APIResponse status;
+    2: i64 executeCount;
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:general.Address address)
@@ -622,4 +628,6 @@ service API
     ////////
 
     SyncStateResult SyncStateGet()
+	
+	ExecuteCountGetResult ExecuteCountGet(1:string executeMethod)
 }
