@@ -45,6 +45,7 @@ union Variant {
 	22: map<Variant, Variant> v_map;
 	23: string v_big_decimal;
 	24: Amount v_amount;
+	25: binary v_byte_array;
 }
 
 struct Annotation {
