@@ -121,12 +121,20 @@ struct SmartExecutionTransInfo
     4: optional TransactionId stateTransaction
 }
 
+struct ExtraFee
+{
+	1: general.Amount sum
+    2: string comment
+	3: TransactionId transactionId
+}
+
 struct SmartStateTransInfo
 {
     1: bool success
     2: general.Amount executionFee
     3: optional general.Variant returnValue
     4: TransactionId startTransaction
+	5: optional list<ExtraFee> extraFee
 }
 
 union SmartTransInfo {
