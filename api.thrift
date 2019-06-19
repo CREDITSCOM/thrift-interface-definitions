@@ -134,7 +134,6 @@ struct SmartStateTransInfo
     2: general.Amount executionFee
     3: optional general.Variant returnValue
     4: TransactionId startTransaction
-	5: optional list<ExtraFee> extraFee
 }
 
 union SmartTransInfo {
@@ -170,6 +169,8 @@ struct Transaction
     11: optional binary userFields
     12: TransactionType type
     13: optional SmartTransInfo smartInfo
+	14: optional list<ExtraFee> extraFee
+	15: i64 poolNumber
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
