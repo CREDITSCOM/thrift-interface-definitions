@@ -629,7 +629,7 @@ service API
     TokenTransactionsResult TokenTransactionsGet(1:general.Address token, 2:i64 offset, 3:i64 limit)
     TokenInfoResult TokenInfoGet(1:general.Address token)
     TokenHoldersResult TokenHoldersGet(1:general.Address token, 2:i64 offset, 3:i64 limit, 4:TokenHoldersSortField order, 5:bool desc)
-    TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc)
+    TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc, 5:string filterName, 6:string filterCode)
 
     // Wallets
     WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
