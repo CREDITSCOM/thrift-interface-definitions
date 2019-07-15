@@ -28,6 +28,7 @@ struct ExecuteByteCodeMultipleResult {
 struct GetContractMethodsResult {
     1: general.APIResponse status
     2: list<general.MethodDescription> methods
+	3: i64 tokenStandard
 }
 
 struct GetContractVariablesResult{

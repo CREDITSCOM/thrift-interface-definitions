@@ -35,7 +35,7 @@ struct SmartContractDeploy
   1: string sourceCode
   2: list<general.ByteCodeObject> byteCodeObjects
   3: string hashState
-  4: TokenStandart tokenStandart
+  4: i64 tokenStandard
 }
 
 // Smart contract info
@@ -91,7 +91,7 @@ struct TokenDeployTransInfo
 {
     1: string name
     2: TokenCode code
-    3: TokenStandart standart
+	3: i64 tokenStandard
     4: SmartOperationState state
     5: optional TransactionId stateTransaction
 }
@@ -372,23 +372,13 @@ struct SmartMethodParamsGetResult
     3: list<general.Variant> params; //general.Variant+
 }
 
-
-
 struct ContractAllMethodsGetResult {
     1: i8 code
     2: string message
     3: list<general.MethodDescription> methods
 }
 
-////////
-enum TokenStandart
-{
-    NotAToken = 0,
-    CreditsBasic = 1,
-    CreditsExtended = 2
-}
 // Smart contracts
-
 struct SmartContractMethodArgument {
     1: string type
     2: string name
@@ -411,7 +401,7 @@ struct SmartContractCompileResult
 {
     1: general.APIResponse status;
     2: list<general.ByteCodeObject> byteCodeObjects;
-    3: TokenStandart ts;
+	3: i64 tokenStandard
 }
 
 // Tokens
@@ -425,7 +415,7 @@ struct TokenInfo
     6: i32 transfersCount
     7: i32 transactionsCount
     8: i32 holdersCount
-    9: TokenStandart standart
+	9: i64 tokenStandard
 }
 
 struct TokenTransaction
@@ -570,6 +560,12 @@ struct ExecuteCountGetResult
     2: i64 executeCount;
 }
 
+struct TokenFilters{
+    1: string name
+	2: string code
+	3: i64 tokenStandard
+}
+
 service API
 {
     WalletDataGetResult WalletDataGet(1:general.Address address)
@@ -629,7 +625,7 @@ service API
     TokenTransactionsResult TokenTransactionsGet(1:general.Address token, 2:i64 offset, 3:i64 limit)
     TokenInfoResult TokenInfoGet(1:general.Address token)
     TokenHoldersResult TokenHoldersGet(1:general.Address token, 2:i64 offset, 3:i64 limit, 4:TokenHoldersSortField order, 5:bool desc)
-    TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc, 5:string filterName, 6:string filterCode)
+	TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc, 5: TokenFilters filters)
 
     // Wallets
     WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
