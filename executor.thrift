@@ -5,14 +5,21 @@ namespace cpp executor
 struct ExecuteByteCodeResult {
    1: general.APIResponse status
    2: list<SetterMethodResult> results
-   3: map<general.Address, binary> externalContractsState
 }
 
 struct SetterMethodResult {
    1: general.APIResponse status
-   2: binary invokedContractState
-   3: general.Variant ret_val
-   4: i64 executionCost
+   2: general.Variant ret_val
+   3: map<general.Address, binary> contractsState
+   4: list<EmittedTransaction> emittedTransactions
+   5: i64 executionCost
+}
+
+struct EmittedTransaction {
+    1: general.Address source
+    2: general.Address target
+    3: general.Amount amount
+    4: optional binary userData
 }
 
 struct GetterMethodResult {
@@ -28,7 +35,7 @@ struct ExecuteByteCodeMultipleResult {
 struct GetContractMethodsResult {
     1: general.APIResponse status
     2: list<general.MethodDescription> methods
-	3: i64 tokenStandard
+    3: i64 tokenStandard
 }
 
 struct GetContractVariablesResult{
