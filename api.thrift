@@ -51,13 +51,14 @@ struct SmartContract
 
 struct SmartContractInvocation
 {
-  1: string method
+  1: required i16 version = 1;
+  2: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  2: list<general.Variant> params //general.Variant+
+  3: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  3: list<general.Address> usedContracts
-  4: bool forgetNewState
-  5: optional SmartContractDeploy smartContractDeploy
+  4: list<general.Address> usedContracts
+  5: bool forgetNewState
+  6: optional SmartContractDeploy smartContractDeploy
 }
 //
 // Transactions
