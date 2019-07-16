@@ -35,7 +35,7 @@ struct SmartContractDeploy
   1: string sourceCode
   2: list<general.ByteCodeObject> byteCodeObjects
   3: string hashState
-  4: i64 tokenStandard
+  4: i32 tokenStandard
 }
 
 // Smart contract info
@@ -51,14 +51,14 @@ struct SmartContract
 
 struct SmartContractInvocation
 {
-  1: required i16 version = 1;
-  2: string method
+  1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  3: list<general.Variant> params //general.Variant+
+  2: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  4: list<general.Address> usedContracts
-  5: bool forgetNewState
-  6: optional SmartContractDeploy smartContractDeploy
+  3: list<general.Address> usedContracts
+  4: bool forgetNewState
+  5: optional SmartContractDeploy smartContractDeploy
+  6: required i16 version = 1;
 }
 //
 // Transactions
@@ -92,7 +92,7 @@ struct TokenDeployTransInfo
 {
     1: string name
     2: TokenCode code
-	3: i64 tokenStandard
+	3: i32 tokenStandard
     4: SmartOperationState state
     5: optional TransactionId stateTransaction
 }
@@ -402,7 +402,7 @@ struct SmartContractCompileResult
 {
     1: general.APIResponse status;
     2: list<general.ByteCodeObject> byteCodeObjects;
-	3: i64 tokenStandard
+	3: i32 tokenStandard
 }
 
 // Tokens
@@ -416,7 +416,7 @@ struct TokenInfo
     6: i32 transfersCount
     7: i32 transactionsCount
     8: i32 holdersCount
-	9: i64 tokenStandard
+	9: i32 tokenStandard
 }
 
 struct TokenTransaction
@@ -564,7 +564,7 @@ struct ExecuteCountGetResult
 struct TokenFilters{
     1: string name
 	2: string code
-	3: i64 tokenStandard
+	3: i32 tokenStandard
 }
 
 service API
