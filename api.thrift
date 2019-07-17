@@ -51,7 +51,6 @@ struct SmartContract
 
 struct SmartContractInvocation
 {
-  6: required i16 version = 1;
   1: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
   2: list<general.Variant> params //general.Variant+
@@ -59,6 +58,7 @@ struct SmartContractInvocation
   3: list<general.Address> usedContracts
   4: bool forgetNewState
   5: optional SmartContractDeploy smartContractDeploy
+  6: required i16 version = 1; // must be on this place! Position number cannot be changed
 }
 //
 // Transactions
