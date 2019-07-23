@@ -58,7 +58,7 @@ struct SmartContractInvocation
   3: list<general.Address> usedContracts
   4: bool forgetNewState
   5: optional SmartContractDeploy smartContractDeploy
-  6: required i16 version = 1; // must be on this place! Position number cannot be changed
+  6: i16 version = 1; // must be on this place! Position number cannot be changed
 }
 //
 // Transactions
