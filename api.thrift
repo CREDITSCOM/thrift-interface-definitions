@@ -172,6 +172,7 @@ struct Transaction
     13: optional SmartTransInfo smartInfo
 	14: optional list<ExtraFee> extraFee
 	15: i64 poolNumber
+	16: optional list<general.Address> usedContracts
 }
 
 // Structure for tranactions that have been emplaced to the blockchain
