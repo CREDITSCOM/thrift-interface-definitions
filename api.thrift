@@ -68,7 +68,7 @@ typedef i64 TransactionInnerId
 
 struct TransactionId
 {
-    1: PoolHash poolHash
+    1: i64 poolSeq
     // Position inside of block
     2: i32 index
 }
