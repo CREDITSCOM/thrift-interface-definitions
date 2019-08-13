@@ -585,14 +585,14 @@ service API
     // For tetris for now.
     PoolHash GetLastHash()
     // Was intended for use by web monitor. Never tested, get blocks starting from `hash` up to `limit` instances
-    PoolListGetResult PoolListGetStable(1:PoolHash hash, 2:i64 limit)
+    PoolListGetResult PoolListGetStable(1:i64 sequence, 2:i64 limit)
 
     // For web monitor, used now. Get metainfo about pools skipping `offset` up to `limit` in amount
     PoolListGetResult PoolListGet(1:i64 offset, 2:i64 limit) // deprecated
     // For web monitor. Get metainfo about block by hash
-    PoolInfoGetResult PoolInfoGet(1:PoolHash hash, 2:i64 index)
+    PoolInfoGetResult PoolInfoGet(1:i64 sequence, 2:i64 index)
     // For web monitor. Get transactions from exactly `hash` pool, skipping `offset` and retrieiving at most `limit`
-    PoolTransactionsGetResult PoolTransactionsGet(1:PoolHash hash, 2:i64 offset, 3:i64 limit)
+    PoolTransactionsGetResult PoolTransactionsGet(1:i64 sequence, 2:i64 offset, 3:i64 limit)
 
     // For web monitor.
     StatsGetResult StatsGet()
