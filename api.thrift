@@ -427,7 +427,8 @@ struct TokenTransaction
     3: Time time
     4: general.Address initiator
     5: string method
-    6: list<general.Variant> params //general.Variant+
+    6: list<general.Variant> params
+    7: SmartOperationState state
 }
 
 struct TokenHolder
@@ -481,13 +482,14 @@ struct TokenTransfer
     6: general.Address initiator
     7: TransactionId transaction
     8: Time time
+	9: SmartOperationState state
 }
 
 struct TokenTransfersResult
 {
-    1: general.APIResponse status;
-    2: i32 count;
-    3: list<TokenTransfer> transfers;
+    1: general.APIResponse status
+    2: i32 count
+    3: list<TokenTransfer> transfers
 }
 
 struct TokenTransactionsResult
