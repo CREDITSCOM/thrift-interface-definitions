@@ -600,7 +600,7 @@ service API
     StatsGetResult StatsGet()
 
     SmartContractGetResult SmartContractGet(1:general.Address address)
-    SmartContractsListGetResult SmartContractsListGet(1:general.Address deployer)
+    SmartContractsListGetResult SmartContractsListGet(1:general.Address deployer, 2:i64 offset, 3:i64 limit)
     SmartContractAddressesListGetResult SmartContractAddressesListGet(1:general.Address deployer)
 
     // Blocks till `obsolete` is not the last block in chain.
