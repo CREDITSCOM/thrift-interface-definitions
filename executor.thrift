@@ -59,6 +59,11 @@ struct MethodHeader{
    2: list<general.Variant> params 
 }
 
+struct ExecutorBuildVersionResult {
+   1: general.APIResponse status
+   2: i32 commitNumber
+   3: string commitHash
+}
 
 service ContractExecutor {
    ExecuteByteCodeResult executeByteCode(1:general.AccessID accessId, 2:general.Address initiatorAddress, 3:SmartContractBinary invokedContract, 4:list<MethodHeader> methods, 5:i64 executionTime, 6:i16 version)
@@ -66,4 +71,5 @@ service ContractExecutor {
    GetContractMethodsResult getContractMethods(1:list<general.ByteCodeObject> byteCodeObjects, 2:i16 version)
    GetContractVariablesResult getContractVariables(1:list<general.ByteCodeObject> byteCodeObjects, 2:binary contractState, 3:i16 version)
    CompileSourceCodeResult compileSourceCode(1:string sourceCode, 2:i16 version)
+   ExecutorBuildVersionResult getExecutorBuildVersion(1:i16 version)
 }
