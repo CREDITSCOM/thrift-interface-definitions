@@ -28,6 +28,13 @@ struct PoolGetResult
 	2: binary pool
 }
 
+struct GetDateTimeResult
+{
+	1: general.APIResponse status
+	2: i64 timestamp
+}
+
+
 service APIEXEC{
 	GetSeedResult GetSeed(1:general.AccessID accessId)
 	SendTransactionResult SendTransaction(1:general.AccessID accessId, 2:api.Transaction transaction)
@@ -35,4 +42,5 @@ service APIEXEC{
 	api.WalletIdGetResult WalletIdGet(1:general.AccessID accessId, 2:general.Address address)	
 	api.WalletBalanceGetResult WalletBalanceGet(1:general.Address address)
 	PoolGetResult PoolGet(1:i64 sequence)
+	GetDateTimeResult GetDateTime(1:general.AccessID accessId)
 }
