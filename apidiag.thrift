@@ -36,20 +36,42 @@ struct ContractDeploy
 {
   1: string sourceCode
   2: list<general.ByteCodeObject> byteCodeObjects
-  3: string hashState
-  4: i32 tokenStandard
+  3: i32 tokenStandard
 }
 
 struct ContractCall
 {
-  1:  i16 version = 1;
   // try call as getter
-  2: bool getter
-  3: string method
+  1: bool getter
+  2: string method
   // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  4: list<general.Variant> params //general.Variant+
+  3: list<general.Variant> params //general.Variant+
   // If true, do not emit any transactions to blockchain (execute contract and forget state change if any)
-  5: list<general.Address> uses
+  4: list<general.Address> uses
+}
+
+struct ContractState
+{
+  // true - stored state hash, false - stored state itself (elder transactions only)
+  1: bool hashed
+  // if hashed == true contains hash, otherwise contains state itself
+  2: string content
+  // ref start
+  3: TransactionId call
+  // fee for execution
+  4: Money fee
+  // returned value
+  5: string returned
+}
+
+union Contract
+{
+    // Contract deployment
+    1: ContractDeploy deploy
+    // Contract invocation
+    2: ContractCall call
+    // Contract result state
+    3: ContractState state
 }
 
 union UserFielData
@@ -58,10 +80,6 @@ union UserFielData
     // Binary data or text
     2: string bytes
     3: general.Amount amount
-    // Contract deployment
-    4: ContractDeploy deploy
-    // Contract invocation
-    5: ContractCall call
 }
 
 struct UserField
@@ -77,7 +95,7 @@ enum TransactionType
     // contarct deployment
     TT_ContractDeploy,
     // Contract execution
-    TT_ContractExecute,
+    TT_ContractCall,
     // Contract replenish (indirect payable() invocation) 
     TT_ContractReplenish,
     // Contract new state
@@ -100,6 +118,8 @@ enum TransactionType
     TT_DelayedTransfer,
     // Service: update current boostrap node list with new one
     TT_UpdateBootstrapList,
+    // Malformed (invalid) transaction
+    TT_Malformed,
     // Any other type
     TT_Other
 }
@@ -124,8 +144,9 @@ struct TransactionData
     8: binary signature
     9: Time timestamp
     10: TransactionType type
-    // user fields if any
+    // user fields if any, does not include special contract-related fields
     11: optional list<UserField> userFields
+    12: optional Contract contract
 }
 
 struct GetTransactionResponse
