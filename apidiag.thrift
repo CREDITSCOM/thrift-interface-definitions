@@ -32,7 +32,7 @@ struct Money
     2: double value
 }
 
-struct SmartContractDeploy
+struct ContractDeploy
 {
   1: string sourceCode
   2: list<general.ByteCodeObject> byteCodeObjects
@@ -40,16 +40,16 @@ struct SmartContractDeploy
   4: i32 tokenStandard
 }
 
-struct SmartContractInvocation
+struct ContractCall
 {
-  1: string method
-  // Empty on deploy, method params stringified Java-side with conversion to string on execute
-  2: list<general.Variant> params //general.Variant+
-  // If true, do not emit any transactions to blockchain (execute smart contract and forget state change if any)
-  3: list<general.Address> usedContracts
+  1:  i16 version = 1;
   // try call as getter
-  4: bool getter
-  5: i16 version = 1; // must be on this place! Position cannot be changed
+  2: bool getter
+  3: string method
+  // Empty on deploy, method params stringified Java-side with conversion to string on execute
+  4: list<general.Variant> params //general.Variant+
+  // If true, do not emit any transactions to blockchain (execute contract and forget state change if any)
+  5: list<general.Address> uses
 }
 
 union UserFielData
@@ -59,9 +59,9 @@ union UserFielData
     2: string bytes
     3: general.Amount amount
     // Contract deployment
-    4: SmartContractDeploy deploy
+    4: ContractDeploy deploy
     // Contract invocation
-    5: SmartContractInvocation execute
+    5: ContractCall call
 }
 
 struct UserField
@@ -122,11 +122,10 @@ struct TransactionData
     // Signature is formed against node's custom binary serialization format,
     // see other docs for description
     8: binary signature
-    9: optional SmartContractInvocation smartContract
-    10: Time timestamp
-    11: TransactionType type
+    9: Time timestamp
+    10: TransactionType type
     // user fields if any
-    12: optional list<UserField> userFields
+    11: optional list<UserField> userFields
 }
 
 struct GetTransactionResponse
