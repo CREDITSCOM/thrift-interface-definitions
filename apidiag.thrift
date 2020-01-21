@@ -24,6 +24,14 @@ struct AmountCommission
   2: double value
 }
 
+struct Money
+{
+    // Exact value
+    1: general.Amount amount
+    // amount in double format
+    2: double value
+}
+
 struct SmartContractDeploy
 {
   1: string sourceCode
@@ -106,19 +114,19 @@ struct TransactionData
     // Receiver or contract address
     3: general.Address target
     // Transfer amount for payment transaction
-    4: general.Amount amount
+    4: Money sum
     // Fee limitation
-    5: AmountCommission max_fee
+    6: AmountCommission max_fee
     // Actual fee to withdraw from source
-    6: AmountCommission actual_fee
+    7: AmountCommission actual_fee
     // Signature is formed against node's custom binary serialization format,
     // see other docs for description
-    7: binary signature
-    8: optional SmartContractInvocation smartContract
-    9: Time timestamp
-    10: TransactionType type
+    8: binary signature
+    9: optional SmartContractInvocation smartContract
+    10: Time timestamp
+    11: TransactionType type
     // user fields if any
-    11: optional list<UserField> userFields
+    12: optional list<UserField> userFields
 }
 
 struct GetTransactionResponse
