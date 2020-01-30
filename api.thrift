@@ -207,12 +207,24 @@ struct Pool
 // Wallets
 //
 
+struct DelegatedItem
+{
+    // partner address
+    1: general.Address wallet
+    // delegated sum
+    2: general.Amount sum
+}
+
 struct Delegated
 {
     // delegated to this wallet by other one
     1: general.Amount incoming
     // total sum delegated by this wallet to others
     2: general.Amount outgoing
+    // list of incoming delegations
+    3: optional list<DelegatedItem> donors
+    // list of outgoing delegations
+    4: optional list<DelegatedItem> recipients
 }
 
 typedef i32 WalletId
@@ -537,6 +549,9 @@ struct WalletInfo
     2: general.Amount balance;
     3: i64 transactionsNumber;
     4: Time firstTransactionTime;
+    // delegations info
+    5: optional Delegated delegated
+
 }
 
 struct WalletsGetResult
