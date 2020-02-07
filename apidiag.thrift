@@ -155,6 +155,65 @@ struct GetTransactionResponse
     2: optional TransactionData transaction
 }
 
+//////////////////// Starter proto /////////////////////////
+
+enum Platform
+{
+    OS_Linux, // = 0
+    OS_MacOS, // = 1
+    OS_Windows // = 2
+}
+
+// Active nodes
+struct ServerNode
+{
+    // endpoint.address().to_string()
+	1: string ip
+    // std::to_string(uint16_t)
+	2: string port
+    // std::to_string(NODE_VERSION)
+	3: string version
+    // Utils::byteStreamToHex(cs::Hash);
+	4: string hash
+    // Utils::byteStreamToHex(cs::PublicKey);
+	5: string publicKey
+    // enum Platform to string
+	6: string platform
+    // integer
+	7: i32 countTrust
+    // std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+	8: i64 timeRegistration
+    // now - timeRegistration - timeNotActive
+	9: i64 timeActive
+}
+
+struct ActiveNodesResult
+{
+	1: general.APIResponse result
+	2: list<ServerNode> nodes
+}
+
+struct ActiveTransactionsResult
+{
+	1: general.APIResponse result
+	2: string count
+}
+
+//////////////////// Starter proto end /////////////////////
+
 service API_DIAG {
+
+  // Former starter node protocol
+	
+  // returns nodes from server buffer
+	ActiveNodesResult GetActiveNodes()
+	
+  // returns active transactions count
+	ActiveTransactionsResult GetActiveTransactionsCount()
+
+  // Diagnostic support
+  
+  // get detailed transaction info
 	GetTransactionResponse GetTransaction(1:TransactionId id)
+
 }
