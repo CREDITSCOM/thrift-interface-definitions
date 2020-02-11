@@ -213,6 +213,8 @@ struct DelegatedItem
     1: general.Address wallet
     // delegated sum
     2: general.Amount sum
+    // Unix time in seconds
+    3: optional Time validUntil
 }
 
 struct Delegated
