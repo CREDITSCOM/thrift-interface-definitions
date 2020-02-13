@@ -201,19 +201,66 @@ struct ActiveTransactionsResult
 
 //////////////////// Starter proto end /////////////////////
 
+struct SessionInfo
+{
+    1: i64 startRound
+    2: i64 curRound
+    3: i64 lastBlock
+    4: i64 uptimeMs
+    5: i64 aveRoundMs
+}
+
+struct StateInfo
+{
+    1: i64 transactionsCount
+    2: i64 walletsCount
+    3: i64 contractsCount
+    4: i64 contractsQueueSize
+    5: i64 grayListSize
+    6: i64 blackListSize
+    7: i64 blockCacheSize
+}
+
+struct NodeInfo
+{
+    1: string id
+    2: string version
+    3: Platform platform
+    4: optional SessionInfo session
+    5: optional StateInfo state
+    6: optional list<string> grayListContent
+    7: optional list<string> blackListContent
+}
+
+struct NodeInfoRequest
+{
+    1: bool session
+    2: bool state
+    3: bool grayListContent
+    4: bool blackListContent
+}
+
+struct NodeInfoRespone
+{
+  	1: general.APIResponse result
+	2: NodeInfo info
+}
+
 service API_DIAG {
 
-  // Former starter node protocol
+    // Former starter node protocol
 	
-  // returns nodes from server buffer
+    // returns nodes from server buffer
 	ActiveNodesResult GetActiveNodes()
 	
-  // returns active transactions count
+    // returns active transactions count
 	ActiveTransactionsResult GetActiveTransactionsCount()
 
-  // Diagnostic support
+    // Diagnostic support
   
-  // get detailed transaction info
+    // get detailed transaction info
 	GetTransactionResponse GetTransaction(1:TransactionId id)
 
+    // get detailed node info
+    NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
 }
