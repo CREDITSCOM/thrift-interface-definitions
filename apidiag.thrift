@@ -213,12 +213,13 @@ struct SessionInfo
 struct StateInfo
 {
     1: i64 transactionsCount
-    2: i64 walletsCount
-    3: i64 contractsCount
-    4: i64 contractsQueueSize
-    5: i64 grayListSize
-    6: i64 blackListSize
-    7: i64 blockCacheSize
+    2: i64 totalWalletsCount
+    3: i64 aliveWalletsCount
+    4: i64 contractsCount
+    5: i64 contractsQueueSize
+    6: i64 grayListSize
+    7: i64 blackListSize
+    8: i64 blockCacheSize
 }
 
 struct NodeInfo
