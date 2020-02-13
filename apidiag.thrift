@@ -210,6 +210,13 @@ struct SessionInfo
     5: i64 aveRoundMs
 }
 
+struct StageCacheSize
+{
+    1: i64 stage1
+    2: i64 stage2
+    3: i64 stage3
+}
+
 struct StateInfo
 {
     1: i64 transactionsCount
@@ -220,6 +227,16 @@ struct StateInfo
     6: i64 grayListSize
     7: i64 blackListSize
     8: i64 blockCacheSize
+    9: StageCacheSize consensusMessage
+    10: StageCacheSize contractsMessage
+    11: StageCacheSize contractsStorage
+}
+
+struct BootstrapNode
+{
+    1: string id
+    2: bool alive
+    3: i64 sequence
 }
 
 struct NodeInfo
@@ -231,6 +248,7 @@ struct NodeInfo
     5: optional StateInfo state
     6: optional list<string> grayListContent
     7: optional list<string> blackListContent
+    8: optional list<BootstrapNode> bootstrap
 }
 
 struct NodeInfoRequest
