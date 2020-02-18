@@ -265,6 +265,12 @@ struct NodeInfoRespone
 	2: NodeInfo info
 }
 
+struct BootstrapTable
+{
+    1: list<string> nodes
+    2: i64 round
+}
+
 service API_DIAG {
 
     // Former starter node protocol
@@ -282,4 +288,6 @@ service API_DIAG {
 
     // get detailed node info
     NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
+
+    general.APIResponse SendBootstrap(1: BootstrapTable table)
 }
