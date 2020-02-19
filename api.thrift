@@ -75,10 +75,40 @@ struct TransactionId
 
 enum TransactionType
 {
-    TT_Normal,
-    TT_SmartDeploy,
-    TT_SmartExecute,
-    TT_SmartState
+    // 0 | CS transfer, former TT_Normal
+    TT_Transfer,
+    // 1 | contract deployment, former TT_SmartDeploy
+    TT_ContractDeploy,
+    // 2 | Contract execution, former TT_SmartExecute
+    TT_ContractCall,
+    // 3 | Contract new state, TT_SmartState
+    TT_ContractState,
+    // 4 | Contract replenish (indirect payable() invocation)
+    TT_ContractReplenish,
+    // 5 | Token deployment
+    TT_TokenDeploy,
+    // 6 | Token transfer
+    TT_TokenTransfer,
+    // 7 | Stake delegation to node address
+    TT_Delegation,
+    // 8 | Cancel stake delegation
+    TT_RevokeDelegation,
+    // 9 | Put some transfer on hold until some codition to release or cancel
+    TT_Hold,
+    // 10 | Release previously hold sum to complete transfer
+    TT_Release,
+    // 11 | Revoke hold to cancel the transfer
+    TT_CancelHold,
+    // 12 | Transfer delayed until some moment
+    TT_DelayedTransfer,
+    // 13 | Service: update current boostrap node list with new one
+    TT_UpdateBootstrapList,
+    // 14 | Service: update current settings
+    TT_UpdateSettings,
+    // 15 | Malformed (invalid) transaction
+    TT_Malformed,
+    // 16 | Any other type
+    TT_Other
 }
 
 enum SmartOperationState

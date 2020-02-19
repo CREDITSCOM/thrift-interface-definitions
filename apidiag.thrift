@@ -90,37 +90,39 @@ struct UserField
 
 enum TransactionType
 {
-    // CS transfer
+    // 0 | CS transfer, former TT_Normal
     TT_Transfer,
-    // contarct deployment
+    // 1 | contarct deployment, former TT_SmartDeploy
     TT_ContractDeploy,
-    // Contract execution
+    // 2 | Contract execution, former TT_SmartExecute
     TT_ContractCall,
-    // Contract replenish (indirect payable() invocation) 
-    TT_ContractReplenish,
-    // Contract new state
+    // 3 | Contract new state, TT_SmartState
     TT_ContractState,
-    // Token deployment
+    // 4 | Contract replenish (indirect payable() invocation)
+    TT_ContractReplenish,
+    // 5 | Token deployment
     TT_TokenDeploy,
-    // Token transfer
+    // 6 | Token transfer
     TT_TokenTransfer,
-    // Stake delegation to node address
+    // 7 | Stake delegation to node address
     TT_Delegation,
-    // Cancel stake delegation
+    // 8 | Cancel stake delegation
     TT_RevokeDelegation,
-    // Put some transfer on hold until some codition to release or cancel
+    // 9 | Put some transfer on hold until some codition to release or cancel
     TT_Hold,
-    // Release previously hold sum to complete transfer
+    // 10 | Release previously hold sum to complete transfer
     TT_Release,
-    // Revoke hold to cancel the transfer
+    // 11 | Revoke hold to cancel the transfer
     TT_CancelHold,
-    // Transfer delayed until some moment
+    // 12 | Transfer delayed until some moment
     TT_DelayedTransfer,
-    // Service: update current boostrap node list with new one
+    // 13 | Service: update current boostrap node list with new one
     TT_UpdateBootstrapList,
-    // Malformed (invalid) transaction
+    // 14 | Service: update current settings
+    TT_UpdateSettings,
+    // 15 | Malformed (invalid) transaction
     TT_Malformed,
-    // Any other type
+    // 16 | Any other type
     TT_Other
 }
 
