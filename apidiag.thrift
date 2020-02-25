@@ -285,5 +285,5 @@ service API_DIAG {
     // get detailed node info
     NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
 
-    general.APIResponse SendBootstrap(1: string data)
+    general.APIResponse SetRawData(1: string data)
 }
