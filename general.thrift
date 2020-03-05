@@ -1,5 +1,7 @@
 namespace java com.credits.general.thrift.generated
 namespace cpp general
+namespace csharp NodeApi
+namespace netcore NodeApi
 
 typedef i64 AccessID
 typedef binary Address
