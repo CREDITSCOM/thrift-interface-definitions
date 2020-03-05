@@ -92,7 +92,7 @@ enum TransactionType
 {
     // 0 | CS transfer, former TT_Normal
     TT_Transfer,
-    // 1 | contarct deployment, former TT_SmartDeploy
+    // 1 | contract deployment, former TT_SmartDeploy
     TT_ContractDeploy,
     // 2 | Contract execution, former TT_SmartExecute
     TT_ContractCall,
@@ -122,9 +122,12 @@ enum TransactionType
     TT_UpdateSettings,
     // 15 | Malformed (invalid) transaction
     TT_Malformed,
-    // 16 | Any other type
-    TT_Other
+    // 16 | Contract emitted transaction
+    TT_ContractEmitted,
+    // 17 | Any other type
+    TT_Other,
 }
+
 
 struct TransactionData
 {

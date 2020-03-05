@@ -107,8 +107,10 @@ enum TransactionType
     TT_UpdateSettings,
     // 15 | Malformed (invalid) transaction
     TT_Malformed,
-    // 16 | Any other type
-    TT_Other
+    // 16 | Contract emitted transaction
+    TT_ContractEmitted,
+    // 17 | Any other type
+    TT_Other,
 }
 
 enum SmartOperationState
