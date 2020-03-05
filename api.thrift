@@ -109,7 +109,9 @@ enum TransactionType
     TT_Malformed,
     // 16 | Contract emitted transaction
     TT_ContractEmitted,
-    // 17 | Any other type
+    // 17 | Utility transaction
+    TT_Utility,
+    // 18 | Any other type
     TT_Other,
 }
 
