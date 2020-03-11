@@ -579,6 +579,14 @@ struct TokensListResult
 }
 
 // Wallets
+
+enum WalletsListSort
+{
+    WL_CurrentSum,
+    WL_CreationTime,
+    WL_TransactionsCount
+}
+
 struct WalletInfo
 {
     1: general.Address address;
@@ -694,6 +702,10 @@ service API
 	TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc, 5: TokenFilters filters)
 
     // Wallets
+
+    // Get page from wallets list from [offset] to [offset + limit]
+    // sort - is one of WalletsListSort values
+    // desc - true to request descending sort, false for ascending sort
     WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
     TrustedGetResult TrustedGet(1:i32 page)
     ////////
