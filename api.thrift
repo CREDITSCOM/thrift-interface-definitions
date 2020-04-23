@@ -354,7 +354,8 @@ struct TransactionFlowResult
     1: general.APIResponse status
     2: optional general.Variant smart_contract_result //general.Variant
     3: i32 roundNum
-	4: TransactionId id;
+	4: TransactionId id
+	5: general.Amount fee
 }
 
 // PoolListGet
