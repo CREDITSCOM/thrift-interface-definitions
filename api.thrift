@@ -75,10 +75,44 @@ struct TransactionId
 
 enum TransactionType
 {
-    TT_Normal,
-    TT_SmartDeploy,
-    TT_SmartExecute,
-    TT_SmartState
+    // 0 | CS transfer, former TT_Normal
+    TT_Transfer,
+    // 1 | contract deployment, former TT_SmartDeploy
+    TT_ContractDeploy,
+    // 2 | Contract execution, former TT_SmartExecute
+    TT_ContractCall,
+    // 3 | Contract new state, TT_SmartState
+    TT_ContractState,
+    // 4 | Contract replenish (indirect payable() invocation)
+    TT_ContractReplenish,
+    // 5 | Token deployment
+    TT_TokenDeploy,
+    // 6 | Token transfer
+    TT_TokenTransfer,
+    // 7 | Stake delegation to node address
+    TT_Delegation,
+    // 8 | Cancel stake delegation
+    TT_RevokeDelegation,
+    // 9 | Put some transfer on hold until some codition to release or cancel
+    TT_Hold,
+    // 10 | Release previously hold sum to complete transfer
+    TT_Release,
+    // 11 | Revoke hold to cancel the transfer
+    TT_CancelHold,
+    // 12 | Transfer delayed until some moment
+    TT_DelayedTransfer,
+    // 13 | Service: update current boostrap node list with new one
+    TT_UpdateBootstrapList,
+    // 14 | Service: update current settings
+    TT_UpdateSettings,
+    // 15 | Malformed (invalid) transaction
+    TT_Malformed,
+    // 16 | Contract emitted transaction
+    TT_ContractEmitted,
+    // 17 | Utility transaction
+    TT_Utility,
+    // 18 | Any other type
+    TT_Other,
 }
 
 enum SmartOperationState
@@ -181,6 +215,19 @@ struct SealedTransaction {
     2: Transaction trxn
 }
 
+// Structure for transaction in short form
+struct ShortTransaction
+{
+	1: TransactionId id
+	2: general.Address source
+	3: general.Address target
+	4: general.Amount amount
+	5: AmountCommission fee
+	6: Time timeCreation
+	7: Currency currency
+	8: TransactionType type
+}
+
 //
 //  Pools
 //
@@ -207,6 +254,28 @@ struct Pool
 // Wallets
 //
 
+struct DelegatedItem
+{
+    // partner address
+    1: general.Address wallet
+    // delegated sum
+    2: general.Amount sum
+    // Unix time in seconds
+    3: optional Time validUntil
+}
+
+struct Delegated
+{
+    // delegated to this wallet by other one
+    1: general.Amount incoming
+    // total sum delegated by this wallet to others
+    2: general.Amount outgoing
+    // list of incoming delegations
+    3: optional list<DelegatedItem> donors
+    // list of outgoing delegations
+    4: optional list<DelegatedItem> recipients
+}
+
 typedef i32 WalletId
 
 struct WalletData
@@ -214,6 +283,7 @@ struct WalletData
     1: WalletId walletId
     2: general.Amount balance
     3: TransactionInnerId lastTransactionId
+    4: optional Delegated delegated
 }
 
 //
@@ -264,6 +334,7 @@ struct WalletBalanceGetResult
 {
     1: general.APIResponse status
     2: general.Amount balance
+    3: optional Delegated delegated
 }
 
 enum TransactionState {
@@ -297,6 +368,30 @@ struct TransactionFlowResult
     2: optional general.Variant smart_contract_result //general.Variant
     3: i32 roundNum
 	4: TransactionId id;
+	5: general.Amount fee
+}
+
+struct SingleQuery
+{
+	1: general.Address requestedAddress
+	2: TransactionId fromId
+}
+
+struct TransactionsQuery
+{
+	1: i16 flag
+	2: list<SingleQuery> queries
+}
+
+struct PublicKeyTransactions
+{
+	1: general.Address requestedAddress
+	2: list<ShortTransaction> transactions
+}
+struct FilteredTransactionsListResult
+{
+	1: general.APIResponse status
+	2: list<PublicKeyTransactions> queryResponse
 }
 
 // PoolListGet
@@ -521,12 +616,23 @@ struct TokensListResult
 }
 
 // Wallets
+
+enum WalletsListSort
+{
+    WL_CurrentSum,
+    WL_CreationTime,
+    WL_TransactionsCount
+}
+
 struct WalletInfo
 {
     1: general.Address address;
     2: general.Amount balance;
     3: i64 transactionsNumber;
     4: Time firstTransactionTime;
+    // delegations info
+    5: optional Delegated delegated
+
 }
 
 struct WalletsGetResult
@@ -584,6 +690,7 @@ service API
     // Not for monitor. Transmit transaction to network for approval
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
     TransactionsGetResult TransactionsListGet(1:i64 offset, 2:i64 limit)
+	FilteredTransactionsListResult FilteredTransactionsListGet(1:TransactionsQuery generalQuery)
 
     // For tetris for now.
     PoolHash GetLastHash()
@@ -633,6 +740,10 @@ service API
 	TokensListResult TokensListGet(1:i64 offset, 2:i64 limit, 3:TokensListSortField order, 4:bool desc, 5: TokenFilters filters)
 
     // Wallets
+
+    // Get page from wallets list from [offset] to [offset + limit]
+    // sort - is one of WalletsListSort values
+    // desc - true to request descending sort, false for ascending sort
     WalletsGetResult WalletsGet(1:i64 offset, 2:i64 limit, 3:i8 ordCol, 4:bool desc)
     TrustedGetResult TrustedGet(1:i32 page)
     ////////
