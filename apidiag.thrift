@@ -90,39 +90,46 @@ struct UserField
 
 enum TransactionType
 {
-    // CS transfer
+    // 0 | CS transfer, former TT_Normal
     TT_Transfer,
-    // contarct deployment
+    // 1 | contract deployment, former TT_SmartDeploy
     TT_ContractDeploy,
-    // Contract execution
+    // 2 | Contract execution, former TT_SmartExecute
     TT_ContractCall,
-    // Contract replenish (indirect payable() invocation) 
-    TT_ContractReplenish,
-    // Contract new state
+    // 3 | Contract new state, TT_SmartState
     TT_ContractState,
-    // Token deployment
+    // 4 | Contract replenish (indirect payable() invocation)
+    TT_ContractReplenish,
+    // 5 | Token deployment
     TT_TokenDeploy,
-    // Token transfer
+    // 6 | Token transfer
     TT_TokenTransfer,
-    // Stake delegation to node address
+    // 7 | Stake delegation to node address
     TT_Delegation,
-    // Cancel stake delegation
+    // 8 | Cancel stake delegation
     TT_RevokeDelegation,
-    // Put some transfer on hold until some codition to release or cancel
+    // 9 | Put some transfer on hold until some codition to release or cancel
     TT_Hold,
-    // Release previously hold sum to complete transfer
+    // 10 | Release previously hold sum to complete transfer
     TT_Release,
-    // Revoke hold to cancel the transfer
+    // 11 | Revoke hold to cancel the transfer
     TT_CancelHold,
-    // Transfer delayed until some moment
+    // 12 | Transfer delayed until some moment
     TT_DelayedTransfer,
-    // Service: update current boostrap node list with new one
+    // 13 | Service: update current boostrap node list with new one
     TT_UpdateBootstrapList,
-    // Malformed (invalid) transaction
+    // 14 | Service: update current settings
+    TT_UpdateSettings,
+    // 15 | Malformed (invalid) transaction
     TT_Malformed,
-    // Any other type
-    TT_Other
+    // 16 | Contract emitted transaction
+    TT_ContractEmitted,
+    // 17 | Utility transaction
+    TT_Utility,
+    // 18 | Any other type
+    TT_Other,
 }
+
 
 struct TransactionData
 {
@@ -155,6 +162,133 @@ struct GetTransactionResponse
     2: optional TransactionData transaction
 }
 
+//////////////////// Starter proto /////////////////////////
+
+enum Platform
+{
+    OS_Linux, // = 0
+    OS_MacOS, // = 1
+    OS_Windows // = 2
+}
+
+// Active nodes
+struct ServerNode
+{
+    // endpoint.address().to_string()
+	1: string ip
+    // std::to_string(uint16_t)
+	2: string port
+    // std::to_string(NODE_VERSION)
+	3: string version
+    // Utils::byteStreamToHex(cs::Hash);
+	4: string hash
+    // Utils::byteStreamToHex(cs::PublicKey);
+	5: string publicKey
+    // enum Platform to string
+	6: string platform
+    // integer
+	7: i32 countTrust
+    // std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+	8: i64 timeRegistration
+    // now - timeRegistration - timeNotActive
+	9: i64 timeActive
+}
+
+struct ActiveNodesResult
+{
+	1: general.APIResponse result
+	2: list<ServerNode> nodes
+}
+
+struct ActiveTransactionsResult
+{
+	1: general.APIResponse result
+	2: string count
+}
+
+//////////////////// Starter proto end /////////////////////
+
+struct SessionInfo
+{
+    1: i64 startRound
+    2: i64 curRound
+    3: i64 lastBlock
+    4: i64 uptimeMs
+    5: i64 aveRoundMs
+}
+
+struct StageCacheSize
+{
+    1: i64 stage1
+    2: i64 stage2
+    3: i64 stage3
+}
+
+struct StateInfo
+{
+    1: i64 transactionsCount
+    2: i64 totalWalletsCount
+    3: i64 aliveWalletsCount
+    4: i64 contractsCount
+    5: i64 contractsQueueSize
+    6: i64 grayListSize
+    7: i64 blackListSize
+    8: i64 blockCacheSize
+    9: StageCacheSize consensusMessage
+    10: StageCacheSize contractsMessage
+    11: StageCacheSize contractsStorage
+}
+
+struct BootstrapNode
+{
+    1: string id
+    2: bool alive
+    3: i64 sequence
+}
+
+struct NodeInfo
+{
+    1: string id
+    2: string version
+    3: Platform platform
+    4: optional SessionInfo session
+    5: optional StateInfo state
+    6: optional list<string> grayListContent
+    7: optional list<string> blackListContent
+    8: optional list<BootstrapNode> bootstrap
+}
+
+struct NodeInfoRequest
+{
+    1: bool session
+    2: bool state
+    3: bool grayListContent
+    4: bool blackListContent
+}
+
+struct NodeInfoRespone
+{
+  	1: general.APIResponse result
+	2: NodeInfo info
+}
+
 service API_DIAG {
+
+    // Former starter node protocol
+	
+    // returns nodes from server buffer
+	ActiveNodesResult GetActiveNodes()
+	
+    // returns active transactions count
+	ActiveTransactionsResult GetActiveTransactionsCount()
+
+    // Diagnostic support
+  
+    // get detailed transaction info
 	GetTransactionResponse GetTransaction(1:TransactionId id)
+
+    // get detailed node info
+    NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
+
+    general.APIResponse SetRawData(1: string data)
 }
