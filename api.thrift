@@ -226,6 +226,7 @@ struct ShortTransaction
 	6: Time timeCreation
 	7: Currency currency
 	8: TransactionType type
+	10: optional binary userFields
 }
 
 //
@@ -369,12 +370,20 @@ struct TransactionFlowResult
     3: i32 roundNum
 	4: TransactionId id
 	5: general.Amount fee
+	6: optional list<ExtraFee> extraFee
+}
+
+struct SingleTokenQuery
+{
+	1: general.Address tokenAddress
+	2: TransactionId fromId
 }
 
 struct SingleQuery
 {
 	1: general.Address requestedAddress
 	2: TransactionId fromId
+	3: optional list<SingleTokenQuery> tokensList
 }
 
 struct TransactionsQuery
@@ -383,10 +392,19 @@ struct TransactionsQuery
 	2: list<SingleQuery> queries
 }
 
+struct SelectedTokenTransfers
+{
+	1: general.Address tokenAddress
+	2: string tokenName
+	3: string tokenTiker
+	4: list<TokenTransfer> transfers
+}
+
 struct PublicKeyTransactions
 {
 	1: general.Address requestedAddress
 	2: list<ShortTransaction> transactions
+	3: optional list<SelectedTokenTransfers> transfersList  
 }
 struct FilteredTransactionsListResult
 {
@@ -579,6 +597,9 @@ struct TokenTransfer
     7: TransactionId transaction
     8: Time time
 	9: SmartOperationState state
+	10: optional binary userFields
+	11: AmountCommission fee
+	14: list<ExtraFee> extraFee
 }
 
 struct TokenTransfersResult
@@ -635,10 +656,15 @@ struct WalletInfo
 
 }
 
+struct ActualFeeGetResult
+{
+	1: AmountCommission fee;
+}
+
 struct WalletsGetResult
 {
-    1: general.APIResponse status
-    2: i32 count
+    1: general.APIResponse status;
+    2: i32 count;
     3: list<WalletInfo> wallets;
 }
 
@@ -679,6 +705,7 @@ struct TokenFilters{
 
 service API
 {
+	ActualFeeGetResult ActualFeeGet(1:i32 transactionSize) 
     WalletDataGetResult WalletDataGet(1:general.Address address)
     WalletIdGetResult WalletIdGet(1:general.Address address)
     WalletTransactionsCountGetResult WalletTransactionsCountGet(1:general.Address address)
