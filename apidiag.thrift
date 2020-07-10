@@ -156,6 +156,13 @@ struct TransactionData
     12: optional Contract contract
 }
 
+struct NodeData
+{
+	1: i16 short_value
+	2: i64 ulong_value
+	3: general.Address publicKey
+}
+
 struct GetTransactionResponse
 {
     1: general.APIResponse status
@@ -291,4 +298,6 @@ service API_DIAG {
     NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
 
     general.APIResponse SetRawData(1: string data)
+	
+	general.APIResponse SetNodeBehaviour(1: NodeData data)
 }
