@@ -249,6 +249,9 @@ struct Pool
     5: PoolNumber poolNumber
     6: general.Address writer
     7: general.Amount totalFee
+	8: list <general.Address> confidants
+	9: i64 realTrusted
+	10: i8 numberTrusted
 }
 
 //
