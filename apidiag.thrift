@@ -299,5 +299,7 @@ service API_DIAG {
 
     general.APIResponse SetRawData(1: string data)
 	
+	general.APIResponse UserCommand(1: string data)
+	
 	general.APIResponse SetNodeBehaviour(1: NodeData data)
 }
