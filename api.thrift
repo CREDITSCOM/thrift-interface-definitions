@@ -372,8 +372,9 @@ struct TransactionFlowResult
     2: optional general.Variant smart_contract_result //general.Variant
     3: i32 roundNum
 	4: TransactionId id
-	5: general.Amount fee
-	6: optional list<ExtraFee> extraFee
+	5: optional TransactionId stateId
+	6: general.Amount fee
+	7: optional list<ExtraFee> extraFee
 }
 
 struct SingleTokenQuery
@@ -632,6 +633,13 @@ struct TokenHoldersResult
     3: list<TokenHolder> holders;
 }
 
+struct SendTransactionResult
+{
+    1: general.APIResponse status;
+    2: i64 requestId
+	3: i32 roundNum
+}
+
 struct TokensListResult
 {
     1: general.APIResponse status;
@@ -675,7 +683,7 @@ struct TrustedInfo
 {
     1: general.Address address;
     2: i32 timesWriter;
-    3: i32 timesTrusted
+    3: i32 timesTrusted;
     4: general.Amount feeCollected;
 }
 
@@ -701,9 +709,47 @@ struct ExecuteCountGetResult
 }
 
 struct TokenFilters{
-    1: string name
-	2: string code
+    1: string name;
+	2: string code;
 	3: i32 tokenStandard
+}
+
+struct TransactionsList{
+	1: list<Transaction> transactions
+}
+
+struct TransactionsListFlowResult{
+	1: list<TransactionFlowResult> transactionResults
+}
+
+struct MultipleRequestIds{
+	1: list<i64> ids
+}
+
+struct Addresses{
+	1: list<general.Address> addresses
+}
+
+struct WalletBalance{
+    1: general.Amount balance
+    2: optional Delegated delegated
+} 
+
+struct WalletBalanceFull{
+	1: general.Address addresses
+	2: bool notFound
+    3: general.Amount balance
+    4: optional Delegated delegated
+}
+
+struct WalletBalanceResults{
+	1: general.APIResponse status
+	2: list<WalletBalanceFull> balances
+}
+
+struct AcceptedRequestId{
+	1: general.APIResponse status
+	2: i64 ids
 }
 
 service API
@@ -713,7 +759,11 @@ service API
     WalletIdGetResult WalletIdGet(1:general.Address address)
     WalletTransactionsCountGetResult WalletTransactionsCountGet(1:general.Address address)
     WalletBalanceGetResult WalletBalanceGet(1:general.Address address)
-
+	
+	//requesting wallet's balances w/o getting results immediately
+	AcceptedRequestId WalletsListBalancesGet(1:Addresses walletAddresses)
+	WalletBalanceResults WalletsListBalancesResultGet(1:i64 requestId)
+	
     TransactionGetResult TransactionGet(1:TransactionId transactionId)
     // Get transactions where `address` is either sender or receiver
     TransactionsGetResult TransactionsGet(1:general.Address address, 2:i64 offset, 3:i64 limit)
@@ -721,7 +771,19 @@ service API
     TransactionFlowResult TransactionFlow(1:Transaction transaction)
     TransactionsGetResult TransactionsListGet(1:i64 offset, 2:i64 limit)
 	FilteredTransactionsListResult FilteredTransactionsListGet(1:TransactionsQuery generalQuery)
-
+	
+	//requesting filtered transaction's list w/o getting result immediately
+	AcceptedRequestId FilteredTrxsListGet(1:TransactionsQuery generalQuery)
+	FilteredTransactionsListResult FilteredTrxsListGetResult(1:i64 requestId)
+	 
+	//sending transaction w/o getting result immediately
+	SendTransactionResult TransactionSend(1:Transaction transaction)
+	TransactionFlowResult TransactionResultGet(1:i64 requestId)
+	
+	//sending transaction's list w/o getting results immediately
+	SendTransactionResult TransactionsListSend(1:TransactionsList transactions)
+	TransactionsListFlowResult TransactionsListResultGet(1:i64 requestId)
+	
     // For tetris for now.
     PoolHash GetLastHash()
     // Was intended for use by web monitor. Never tested, get blocks starting from `hash` up to `limit` instances
