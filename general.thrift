@@ -18,7 +18,7 @@ struct object {
 
 struct Amount
 {
-  1: required i32 integral = 0;
+  1: required i64 integral = 0;
   2: required i64 fraction = 0;
 }
 
