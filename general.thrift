@@ -66,11 +66,18 @@ struct MethodDescription {
   2: string name
   3: list<MethodArgument> arguments
   4: list<Annotation> annotations
+  5: optional list<string> modifiers
+  6: optional string address
 }
 
 struct ByteCodeObject {
   1: string name
   2: binary byteCode
+}
+
+struct MethodSignature {
+  1: string signature
+  2: binary address
 }
 
 //

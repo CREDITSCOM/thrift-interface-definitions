@@ -37,6 +37,7 @@ struct SmartContractDeploy
   3: string hashState
   4: i32 tokenStandard
   5: i8 lang
+  6: list<general.MethodDescription> methods
 }
 
 // Smart contract info
@@ -523,6 +524,7 @@ struct SmartContractCompileResult
     1: general.APIResponse status;
     2: list<general.ByteCodeObject> byteCodeObjects;
 	3: i32 tokenStandard
+	4: list<general.MethodDescription> methods
 }
 
 // Tokens
