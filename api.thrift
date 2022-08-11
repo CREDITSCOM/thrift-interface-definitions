@@ -37,7 +37,7 @@ struct SmartContractDeploy
   3: string hashState
   4: i32 tokenStandard
   5: i8 lang
-  6: list<general.MethodDescription> methods
+  6: optional list<general.MethodShortDescription> methods
 }
 
 // Smart contract info
@@ -524,7 +524,7 @@ struct SmartContractCompileResult
     1: general.APIResponse status;
     2: list<general.ByteCodeObject> byteCodeObjects;
 	3: i32 tokenStandard
-	4: list<general.MethodDescription> methods
+	4: list<general.MethodSignature> methods
 }
 
 // Tokens
@@ -815,6 +815,7 @@ service API
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:general.Address address, 2:list<TransactionInnerId> id)
     ContractAllMethodsGetResult ContractAllMethodsGet(1: list<general.ByteCodeObject> byteCodeObjects)
+	ContractAllMethodsGetResult ContractMethodsGet(1:general.Address address)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:general.Address address, 2:TransactionInnerId id)
 
     ////////

@@ -80,6 +80,19 @@ struct MethodSignature {
   2: binary address
 }
 
+struct MethodShortArgument {
+  1: string type
+  2: string name
+}
+
+struct MethodShortDescription {
+  1: string name
+  2: list<MethodShortArgument> retValues
+  3: list<MethodShortArgument> arguments
+  4: optional list<string> modifiers
+  5: optional string address
+}
+
 //
 // API responses
 //
