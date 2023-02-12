@@ -348,7 +348,9 @@ service API_DIAG {
 
     // get detailed node info
     NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
-
+	
+	general.APIResponse AddNeighbour(1: string publicKey)
+	
     general.APIResponse SetRawData(1: string data)
 	
 	general.APIResponse UserCommand(1: string data)
