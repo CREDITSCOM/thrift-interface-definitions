@@ -752,6 +752,12 @@ struct AcceptedRequestId{
 	2: i64 ids
 }
 
+struct RoundData{
+	1: general.APIResponse status
+	2: i64 roundNum
+	3: i32 subRound
+}
+
 service API
 {
 	ActualFeeGetResult ActualFeeGet(1:i32 transactionSize) 
@@ -760,6 +766,7 @@ service API
     WalletTransactionsCountGetResult WalletTransactionsCountGet(1:general.Address address)
     WalletBalanceGetResult WalletBalanceGet(1:general.Address address)
 	
+	RoundData RoundDataGet()
 	//requesting wallet's balances w/o getting results immediately
 	AcceptedRequestId WalletsListBalancesGet(1:Addresses walletAddresses)
 	WalletBalanceResults WalletsListBalancesResultGet(1:i64 requestId)
