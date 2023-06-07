@@ -254,6 +254,7 @@ struct Pool
 	8: list <general.Address> confidants
 	9: i64 realTrusted
 	10: i8 numberTrusted
+	11: optional list<general.Amount> blockReward
 }
 
 //
