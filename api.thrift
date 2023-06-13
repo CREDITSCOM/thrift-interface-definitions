@@ -268,7 +268,11 @@ struct DelegatedItem
     // delegated sum
     2: general.Amount sum
     // Unix time in seconds
-    3: optional Time validUntil
+    3: optional i64 validUntil
+	// Unix time in seconds
+    4: optional i64 fromTime
+	// Unix time in seconds
+    5: optional i8 coeff
 }
 
 struct Delegated
@@ -829,7 +833,7 @@ service API
     ////////
     // Smart contracts
     SmartContractDataResult SmartContractDataGet(1:general.Address address)
-    SmartContractCompileResult SmartContractCompile(1:string sourceCode, 2:i8 lang)
+    SmartContractCompileResult SmartContractCompile(1:string sourceCode)
 
     // Tokens
     TokenBalancesResult TokenBalancesGet(1:general.Address address)
