@@ -320,6 +320,10 @@ struct ServerTrustNode
     27: i32 failedTrustedAPrevMonth
     28: i32 failedTrustedATotal
 	29: bool active
+	30: general.Amount rewardDay
+	31: general.Amount rewardMonth
+	32: general.Amount rewardPrevMonth
+	33: general.Amount rewardTotal
 
 }
 
