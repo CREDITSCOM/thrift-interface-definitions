@@ -342,6 +342,8 @@ service API_DIAG {
 	
 	ActiveTrustNodesResult GetActiveTrustNodes()
 	
+	ActiveTrustNodesResult GetNodeStat(1:general.Address address)
+	
     // returns active transactions count
 	ActiveTransactionsResult GetActiveTransactionsCount()
 
