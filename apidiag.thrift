@@ -327,10 +327,40 @@ struct ServerTrustNode
 
 }
 
+struct DelegatorRewardSet{
+	1: general.Address delegatorAddress
+	2: general.Amount rewardDay
+	3: general.Amount rewardMonth
+	4: general.Amount rewardPrevMonth
+	5: general.Amount rewardTotal
+}
+
+
+
+struct NodeRewardSet{
+	1: general.Address nodeAddress
+	2: list<DelegatorRewardSet> delegators
+}
+
+
+struct RewardEvaluation{
+	1: general.APIResponse result
+	2: list<NodeRewardSet> nodesReward
+}
+
+
 struct ActiveTrustNodesResult
 {
 	1: general.APIResponse result
 	2: list<ServerTrustNode> nodes
+}
+
+struct SupplyInfo {
+    1: general.APIResponse result
+	2: general.Amount initialSupply
+	3: general.Amount coinsBurned
+	4: general.Amount coinsMined
+	5: general.Amount currentSupply
 }
 
 service API_DIAG {
@@ -344,6 +374,9 @@ service API_DIAG {
 	
 	ActiveTrustNodesResult GetNodeStat(1:general.Address address)
 	
+
+	RewardEvaluation GetNodeRewardEvaluation(1:general.Address address)
+	
     // returns active transactions count
 	ActiveTransactionsResult GetActiveTransactionsCount()
 
@@ -354,6 +387,8 @@ service API_DIAG {
 
     // get detailed node info
     NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
+	
+	SupplyInfo GetSupply()
 	
 	general.APIResponse AddNeighbour(1: string publicKey)
 	
