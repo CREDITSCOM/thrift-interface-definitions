@@ -1,6 +1,6 @@
 include 'general.thrift'
 
-namespace csharp NodeApiDiag
+namespace netstd NodeApiDiag
 namespace netcore NodeApiDiag
 namespace java com.credits.client.node.diag.thrift.generated
 namespace cpp api_diag
