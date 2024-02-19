@@ -2,7 +2,7 @@ include 'general.thrift'
 include 'api.thrift'
 namespace java com.credits.client.executor.thrift.generated.apiexec
 namespace cpp apiexec
-namespace csharp NodeApiExec
+namespace netstd NodeApiExec
 namespace netcore NodeApiExec
 
 struct GetSeedResult

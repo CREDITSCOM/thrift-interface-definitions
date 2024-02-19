@@ -1,6 +1,6 @@
 namespace java com.credits.general.thrift.generated
 namespace cpp general
-namespace csharp NodeApi
+namespace netstd NodeApi
 namespace netcore NodeApi
 
 typedef i64 AccessID

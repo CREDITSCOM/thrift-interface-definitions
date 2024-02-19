@@ -1,6 +1,6 @@
 include 'general.thrift'
 
-namespace csharp NodeApi
+namespace netstd NodeApi
 namespace netcore NodeApi
 namespace java com.credits.client.node.thrift.generated
 namespace cpp api
