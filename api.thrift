@@ -833,7 +833,7 @@ service API
     ////////
     // Smart contracts
     SmartContractDataResult SmartContractDataGet(1:general.Address address)
-    SmartContractCompileResult SmartContractCompile(1:string sourceCode)
+    SmartContractCompileResult SmartContractCompile(1:string sourceCode, 2:i8 lang)
 
     // Tokens
     TokenBalancesResult TokenBalancesGet(1:general.Address address)
