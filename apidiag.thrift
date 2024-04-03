@@ -279,12 +279,103 @@ struct NodeInfoRespone
 	2: NodeInfo info
 }
 
+struct ServerTrustNode
+{
+    // endpoint.address().to_string()
+	1: string ip
+    // std::to_string(uint16_t)
+	2: string port
+    // std::to_string(NODE_VERSION)
+	3: string version
+    // Utils::byteStreamToHex(cs::Hash);
+	4: string hash
+    // Utils::byteStreamToHex(cs::PublicKey);
+	5: string publicKey
+    // enum Platform to string
+	6: string platform
+    // std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+	7: i64 timeRegistration
+    // now - timeRegistration - timeNotActive
+	8: i64 timeActive	
+    // integer
+	9: i32 trustDay
+	10: i32 trustMonth
+	11: i32 trustPrevMonth
+	12: i32 trustTotal
+	    // integer
+	13: i32 failedTrustDay
+	14: i32 failedTrustMonth
+	15: i32 failedTrustPrevMonth
+	16: i32 failedTrustTotal
+	17: general.Amount feeDay
+	18: general.Amount feeMonth
+	19: general.Amount feePrevMonth
+	20: general.Amount feeTotal
+	21: i32 trustedADay
+    22: i32 trustedAMonth
+    23: i32 trustedAPrevMonth
+    24: i32 trustedATotal
+    25: i32 failedTrustedADay
+    26: i32 failedTrustedAMonth
+    27: i32 failedTrustedAPrevMonth
+    28: i32 failedTrustedATotal
+	29: bool active
+	30: general.Amount rewardDay
+	31: general.Amount rewardMonth
+	32: general.Amount rewardPrevMonth
+	33: general.Amount rewardTotal
+
+}
+
+struct DelegatorRewardSet{
+	1: general.Address delegatorAddress
+	2: general.Amount rewardDay
+	3: general.Amount rewardMonth
+	4: general.Amount rewardPrevMonth
+	5: general.Amount rewardTotal
+}
+
+
+
+struct NodeRewardSet{
+	1: general.Address nodeAddress
+	2: list<DelegatorRewardSet> delegators
+}
+
+
+struct RewardEvaluation{
+	1: general.APIResponse result
+	2: list<NodeRewardSet> nodesReward
+}
+
+
+struct ActiveTrustNodesResult
+{
+	1: general.APIResponse result
+	2: list<ServerTrustNode> nodes
+}
+
+struct SupplyInfo {
+    1: general.APIResponse result
+	2: general.Amount initialSupply
+	3: general.Amount coinsBurned
+	4: general.Amount coinsMined
+	5: general.Amount currentSupply
+}
+
 service API_DIAG {
 
     // Former starter node protocol
 	
     // returns nodes from server buffer
 	ActiveNodesResult GetActiveNodes()
+	
+	ActiveTrustNodesResult GetActiveTrustNodes()
+	
+	ActiveTrustNodesResult GetNodeStat(1:general.Address address)
+	
+
+	RewardEvaluation GetNodeRewardEvaluation(1:general.Address address)
 	
     // returns active transactions count
 	ActiveTransactionsResult GetActiveTransactionsCount()
@@ -296,7 +387,11 @@ service API_DIAG {
 
     // get detailed node info
     NodeInfoRespone GetNodeInfo(1: NodeInfoRequest request)
-
+	
+	SupplyInfo GetSupply()
+	
+	general.APIResponse AddNeighbour(1: string publicKey)
+	
     general.APIResponse SetRawData(1: string data)
 	
 	general.APIResponse UserCommand(1: string data)

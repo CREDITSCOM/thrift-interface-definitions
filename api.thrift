@@ -36,6 +36,8 @@ struct SmartContractDeploy
   2: list<general.ByteCodeObject> byteCodeObjects
   3: string hashState
   4: i32 tokenStandard
+  5: i8 lang
+  6: optional list<general.MethodShortDescription> methods
 }
 
 // Smart contract info
@@ -252,6 +254,7 @@ struct Pool
 	8: list <general.Address> confidants
 	9: i64 realTrusted
 	10: i8 numberTrusted
+	11: optional list<general.Amount> blockReward
 }
 
 //
@@ -265,7 +268,11 @@ struct DelegatedItem
     // delegated sum
     2: general.Amount sum
     // Unix time in seconds
-    3: optional Time validUntil
+    3: optional i64 validUntil
+	// Unix time in seconds
+    4: optional i64 fromTime
+	// Unix time in seconds
+    5: optional i8 coeff
 }
 
 struct Delegated
@@ -522,6 +529,7 @@ struct SmartContractCompileResult
     1: general.APIResponse status;
     2: list<general.ByteCodeObject> byteCodeObjects;
 	3: i32 tokenStandard
+	4: list<general.MethodSignature> methods
 }
 
 // Tokens
@@ -752,6 +760,12 @@ struct AcceptedRequestId{
 	2: i64 ids
 }
 
+struct RoundData{
+	1: general.APIResponse status
+	2: i64 roundNum
+	3: i32 subRound
+}
+
 service API
 {
 	ActualFeeGetResult ActualFeeGet(1:i32 transactionSize) 
@@ -760,6 +774,7 @@ service API
     WalletTransactionsCountGetResult WalletTransactionsCountGet(1:general.Address address)
     WalletBalanceGetResult WalletBalanceGet(1:general.Address address)
 	
+	RoundData RoundDataGet()
 	//requesting wallet's balances w/o getting results immediately
 	AcceptedRequestId WalletsListBalancesGet(1:Addresses walletAddresses)
 	WalletBalanceResults WalletsListBalancesResultGet(1:i64 requestId)
@@ -812,6 +827,7 @@ service API
     SmartContractsListGetResult SmartContractsAllListGet(1:i64 offset, 2:i64 limit)
     TransactionsStateGetResult TransactionsStateGet(1:general.Address address, 2:list<TransactionInnerId> id)
     ContractAllMethodsGetResult ContractAllMethodsGet(1: list<general.ByteCodeObject> byteCodeObjects)
+	ContractAllMethodsGetResult ContractMethodsGet(1:general.Address address)
     SmartMethodParamsGetResult SmartMethodParamsGet(1:general.Address address, 2:TransactionInnerId id)
 
     ////////
